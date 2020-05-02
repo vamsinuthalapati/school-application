@@ -5,7 +5,30 @@
   <link rel="self" href="https://spring.io/blog.atom" />
   <id>http://spring.io/blog.atom</id>
   <icon>https://spring.io/favicon.ico</icon>
-  <updated>2020-05-01T03:36:37Z</updated>
+  <updated>2020-05-01T05:31:01Z</updated>
+  <entry>
+    <title>Spring Boot 2.3.0.RC1 available now</title>
+    <link rel="alternate" href="https://spring.io/blog/2020/05/01/spring-boot-2-3-0-rc1-available-now" />
+    <category term="releases" label="Releases" />
+    <author>
+      <name>Phil Webb</name>
+    </author>
+    <id>tag:spring.io,2020-05-01:4051</id>
+    <updated>2020-05-01T05:31:01Z</updated>
+    <content type="html">&lt;p&gt;On behalf of the team and everyone that contributed, I am pleased to announce that the first release candidate of Spring Boot 2.3 is available now from &lt;a href="https://repo.spring.io/milestone/"&gt;our milestone repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This release closes over &lt;a href="https://github.com/spring-projects/spring-boot/releases/tag/v2.3.0.RC1"&gt;70 issues and pull requests&lt;/a&gt;. Thanks to all those who have contributed.&lt;/p&gt;
+&lt;p&gt;Highlights of this milestone include:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Auto-configuration of a Wavefront sender bean.&lt;/li&gt;
+  &lt;li&gt;Easier configuration of the data/time converts used by web applications.&lt;/li&gt;
+  &lt;li&gt;Automatic creation of the &lt;code&gt;developmentOnly&lt;/code&gt; configuration in Gradle.&lt;/li&gt;
+  &lt;li&gt;Java buildpack support from the newly created &lt;a href="https://paketo.io/"&gt;Paketo&lt;/a&gt; project.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For a complete list of changes and upgrade instructions, please see the &lt;a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.3.0-RC1-Release-Notes"&gt;Spring Boot 2.3 Release Notes&lt;/a&gt; on the wiki and the &lt;a href="http://docs.spring.io/spring-boot/docs/2.3.0.RC1/reference/html/"&gt;updated reference documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Barring any unforeseen circumstances, our current plan is to release 2.3.0 GA on May 14, so please give the RC a try if you can. To bootstrap a new project, you can head over to &lt;a href="https://start.spring.io"&gt;https://start.spring.io&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://projects.spring.io/spring-boot/"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-boot"&gt;GitHub&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-boot/issues"&gt;Issues&lt;/a&gt; | &lt;a href="http://docs.spring.io/spring-boot/docs/2.3.0.RC1/reference/html"&gt;Documentation&lt;/a&gt; | &lt;a href="http://stackoverflow.com/questions/tagged/spring-boot"&gt;Stack Overflow&lt;/a&gt; | &lt;a href="https://gitter.im/spring-projects/spring-boot"&gt;Gitter&lt;/a&gt;&lt;/p&gt;
+&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
+  </entry>
   <entry>
     <title>Adrian Cole, founder or co-founder of Feign, JClouds, and Spring Cloud Sleuth and major contributor to OpenZipkin</title>
     <link rel="alternate" href="https://spring.io/blog/2020/05/01/adrian-cole-founder-or-co-founder-of-feign-jclouds-and-spring-cloud-sleuth-and-major-contributor-to-openzipkin" />
@@ -1579,19 +1602,6 @@ dependencies {&#xD;
   //...&#xD;
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
-  </entry>
-  <entry>
-    <title>A Bootiful Podcast: Jetbrains Developer Advocacy head, "Talking Kotlin" podcast host, and Kotlin rockstar Hadi Hariri</title>
-    <link rel="alternate" href="https://spring.io/blog/2020/04/17/a-bootiful-podcast-jetbrains-developer-advocacy-head-talking-kotlin-podcast-host-and-kotlin-rockstar-hadi-hariri" />
-    <category term="engineering" label="Engineering" />
-    <author>
-      <name>Josh Long</name>
-    </author>
-    <id>tag:spring.io,2020-04-17:4032</id>
-    <updated>2020-04-17T02:49:38Z</updated>
-    <content type="html">&lt;p&gt;Hi, Spring fans! In today&amp;rsquo;s installment, &lt;a href="http://twitter.com/starbuxman"&gt;Josh Long (@starbuxman)&lt;/a&gt; talks to Jetbrains developer advocacy head and Kotlin rockstar &lt;a href="http://twitter.com/hhariri"&gt;Hadi Hariri (@hhariri)&lt;/a&gt; about all things Kotlin, ecosystem, Jetbrains, and more. &lt;/p&gt;
-&lt;iframe title="Jetbrains developer advocacy head and Kotlin rockstar Hadi Hariri" src="https://www.podbean.com/media/player/p726f-d9735e?from=usersite&amp;vjs=1&amp;skin=1&amp;fonts=Helvetica&amp;auto=0&amp;download=1" height="315" width="100%" style="border: none;" scrolling="no" data-name="pb-iframe-player"&gt;&lt;/iframe&gt;
 &lt;!-- rendered by Sagan Renderer Service --&gt;</content>
   </entry>
 </feed>
