@@ -1,14 +1,16 @@
 package com.webapplication.school.app.domain;
 
+import org.springframework.http.HttpStatus;
+
 public class ResponseObject {
 
-	private String response;
+	private Object response;
 	private String message;
-	private String status;
-	public String getResponse() {
+	private Object status;
+	public Object getResponse() {
 		return response;
 	}
-	public void setResponse(String response) {
+	public void setResponse(Object response) {
 		this.response = response;
 	}
 	public String getMessage() {
@@ -17,25 +19,28 @@ public class ResponseObject {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
+	
+	public void setStatus(Object status) {
 		this.status = status;
 	}
-	public ResponseObject(String response, String message, String status) {
+	public ResponseObject(Object response, String message, HttpStatus status) {
 		super();
 		this.response = response;
 		this.message = message;
 		this.status = status;
 	}
-	public ResponseObject() {
-		super();
+	public int getStatus() {
+		if (this.status instanceof HttpStatus) {
+			return ((HttpStatus) this.status).value();
+		} else {
+			return (Integer) this.status;
+		}
 	}
 	@Override
 	public String toString() {
 		return "ResponseObject [response=" + response + ", message=" + message + ", status=" + status + "]";
 	}
+	
 	
 	
 }

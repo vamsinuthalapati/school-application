@@ -1,28 +1,22 @@
 package com.webapplication.school.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webapplication.school.app.domain.LoginRequest;
 import com.webapplication.school.app.domain.ResponseObject;
-import com.webapplication.school.app.service.StudentService;
+import com.webapplication.school.app.service.TeacherService;
 
 @RestController
 @RequestMapping("/app/v1")
-public class StudentController {
+public class TeacherController {
 
 	@Autowired
-	private StudentService studentService;
+	private TeacherService teacherService;
 	
-	@PostMapping("/stdLogin")
-	public ResponseObject studentLogin(@RequestBody LoginRequest studentLogin) {
-		System.out.println("in login service");
-		return studentService.login(studentLogin);
+	public ResponseObject teacherLogin(@RequestBody LoginRequest teachLogin) {
+		return teacherService.teacherLogin(teachLogin);
 	}
-	
-	
-	
 }
