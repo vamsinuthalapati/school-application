@@ -2,19 +2,14 @@ package com.webapplication.school.app.domain;
 
 import java.util.Calendar;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "teacher")
@@ -22,6 +17,7 @@ public class Teacher {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	private Long id;
 	@Column(name = "external_id")
 	private String externalId;
@@ -42,133 +38,138 @@ public class Teacher {
 	private String countryCode;
 	@Column(name = "contact_number")
 	private String contactNumber;
+	@Column(name = "email")
+	private String email;
 	@Column(name = "gender")
 	private String gender;
-	@Column(name = "last_time_signed_in")
-	private Calendar lastTimeSignedIn;
+	@Column(name = "class")
+	private String className;
+	@Column(name = "section")
+	private String section;
 	@Column(name = "subject")
 	private String subject;
+	@Column(name = "is_contact_verified")
+	private Boolean isContactVerified;
+	@Column(name = "is_email_verified")
+	private Boolean isEmailVerified;
+	@Column(name = "last_time_signed_in")
+	private Calendar lastTimeSignedIn;
 	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-	@JoinColumn(name = "class_id")
-	private Classes classes;
-
+	
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public String getExternalId() {
 		return externalId;
 	}
-
 	public void setExternalId(String externalId) {
 		this.externalId = externalId;
 	}
-
 	public String getEmployeeId() {
 		return employeeId;
 	}
-
 	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
-
 	public Calendar getCreatedOn() {
 		return createdOn;
 	}
-
 	public void setCreatedOn(Calendar createdOn) {
 		this.createdOn = createdOn;
 	}
-
 	public Calendar getModifiedOn() {
 		return modifiedOn;
 	}
-
 	public void setModifiedOn(Calendar modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public Calendar getDateOfBirth() {
 		return dateOfBirth;
 	}
-
 	public void setDateOfBirth(Calendar dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public String getCountryCode() {
 		return countryCode;
 	}
-
 	public void setCountryCode(String countryCode) {
 		this.countryCode = countryCode;
 	}
-
 	public String getContactNumber() {
 		return contactNumber;
 	}
-
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
-
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public String getGender() {
 		return gender;
 	}
-
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-
-	public Calendar getLastTimeSignedIn() {
-		return lastTimeSignedIn;
+	public String getClassName() {
+		return className;
 	}
-
-	public void setLastTimeSignedIn(Calendar lastTimeSignedIn) {
-		this.lastTimeSignedIn = lastTimeSignedIn;
+	public void setClassName(String className) {
+		this.className = className;
 	}
-
-	public Classes getClasses() {
-		return classes;
+	public String getSection() {
+		return section;
 	}
-
-	public void setClasses(Classes classes) {
-		this.classes = classes;
+	public void setSection(String section) {
+		this.section = section;
 	}
-	
 	public String getSubject() {
 		return subject;
 	}
-
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-
+	public Boolean getIsContactVerified() {
+		return isContactVerified;
+	}
+	public void setIsContactVerified(Boolean isContactVerified) {
+		this.isContactVerified = isContactVerified;
+	}
+	public Boolean getIsEmailVerified() {
+		return isEmailVerified;
+	}
+	public void setIsEmailVerified(Boolean isEmailVerified) {
+		this.isEmailVerified = isEmailVerified;
+	}
+	public Calendar getLastTimeSignedIn() {
+		return lastTimeSignedIn;
+	}
+	public void setLastTimeSignedIn(Calendar lastTimeSignedIn) {
+		this.lastTimeSignedIn = lastTimeSignedIn;
+	}
+	
+	
 	public Teacher(Long id, String externalId, String employeeId, Calendar createdOn, Calendar modifiedOn, String name,
-			Calendar dateOfBirth, String password, String countryCode, String contactNumber, String gender,
-			Calendar lastTimeSignedIn, String subject, Classes classes) {
+			Calendar dateOfBirth, String password, String countryCode, String contactNumber, String email,
+			String gender, String className, String section, String subject, Boolean isContactVerified,
+			Boolean isEmailVerified, Calendar lastTimeSignedIn) {
 		super();
 		this.id = id;
 		this.externalId = externalId;
@@ -180,24 +181,33 @@ public class Teacher {
 		this.password = password;
 		this.countryCode = countryCode;
 		this.contactNumber = contactNumber;
+		this.email = email;
 		this.gender = gender;
-		this.lastTimeSignedIn = lastTimeSignedIn;
+		this.className = className;
+		this.section = section;
 		this.subject = subject;
-		this.classes = classes;
+		this.isContactVerified = isContactVerified;
+		this.isEmailVerified = isEmailVerified;
+		this.lastTimeSignedIn = lastTimeSignedIn;
 	}
-
+	
+	
+	
 	public Teacher() {
 		super();
 	}
-
 	@Override
 	public String toString() {
 		return "Teacher [id=" + id + ", externalId=" + externalId + ", employeeId=" + employeeId + ", createdOn="
 				+ createdOn + ", modifiedOn=" + modifiedOn + ", name=" + name + ", dateOfBirth=" + dateOfBirth
 				+ ", password=" + password + ", countryCode=" + countryCode + ", contactNumber=" + contactNumber
-				+ ", gender=" + gender + ", lastTimeSignedIn=" + lastTimeSignedIn + ", subject=" + subject
-				+ ", classes=" + classes + "]";
+				+ ", email=" + email + ", gender=" + gender + ", className=" + className + ", section=" + section
+				+ ", subject=" + subject + ", isContactVerified=" + isContactVerified + ", isEmailVerified="
+				+ isEmailVerified + ", lastTimeSignedIn=" + lastTimeSignedIn + "]";
 	}
+	
+	
+	
 
 
 }
