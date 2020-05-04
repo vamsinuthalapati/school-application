@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webapplication.school.app.domain.LoginRequest;
 import com.webapplication.school.app.domain.ResponseObject;
+import com.webapplication.school.app.domain.StudentRegister;
 import com.webapplication.school.app.service.StudentService;
 
 @RestController
@@ -19,10 +20,12 @@ public class StudentController {
 	
 	@PostMapping("/stdLogin")
 	public ResponseObject studentLogin(@RequestBody LoginRequest studentLogin) {
-		System.out.println("in login service");
 		return studentService.login(studentLogin);
 	}
 	
-	
+	@PostMapping("/stdRegister")
+	public ResponseObject studentRegister(@RequestBody StudentRegister studentRegister) {
+		return studentService.register(studentRegister);
+	}
 	
 }

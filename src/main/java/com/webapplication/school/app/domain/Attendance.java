@@ -22,7 +22,7 @@ public class Attendance {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
-	private String id;
+	private Long id;
 	@Column(name = "date")
 	private Calendar date;
 	@Column(name = "std_roll_number")
@@ -39,11 +39,11 @@ public class Attendance {
 	@JoinColumn(name = "std_id")
 	private Student student;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -95,7 +95,7 @@ public class Attendance {
 		this.student = student;
 	}
 
-	public Attendance(String id, Calendar date, String stdRollNumber, String className, String section, boolean present,
+	public Attendance(Long id, Calendar date, String stdRollNumber, String className, String section, boolean present,
 			Student student) {
 		super();
 		this.id = id;
@@ -108,6 +108,17 @@ public class Attendance {
 	}
 	
 	
+
+	public Attendance(Calendar date, String stdRollNumber, String className, String section, boolean present,
+			Student student) {
+		super();
+		this.date = date;
+		this.stdRollNumber = stdRollNumber;
+		this.className = className;
+		this.section = section;
+		this.present = present;
+		this.student = student;
+	}
 
 	public Attendance() {
 		super();

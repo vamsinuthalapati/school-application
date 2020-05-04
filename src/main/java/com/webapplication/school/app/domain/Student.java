@@ -179,7 +179,28 @@ public class Student {
 		this.lastTimeSignedIn = lastTimeSignedIn;
 	}
 	
-	
+	public Student(String externalId, String rollNumber, Calendar createdOn, Calendar modifiedOn, String name,
+			Calendar dateOfBirth, String password, String countryCode, String contactNumber, String email,
+			String gender, String className, String section, Boolean isContactVerified, Boolean isEmailVerified,
+			Calendar lastTimeSignedIn) {
+		super();
+		this.externalId = externalId;
+		this.rollNumber = rollNumber;
+		this.createdOn = createdOn;
+		this.modifiedOn = modifiedOn;
+		this.name = name;
+		this.dateOfBirth = dateOfBirth;
+		this.password = password;
+		this.countryCode = countryCode;
+		this.contactNumber = contactNumber;
+		this.email = email;
+		this.gender = gender;
+		this.className = className;
+		this.section = section;
+		this.isContactVerified = isContactVerified;
+		this.isEmailVerified = isEmailVerified;
+		this.lastTimeSignedIn = lastTimeSignedIn;
+	}
 	public Student() {
 		super();
 	}
