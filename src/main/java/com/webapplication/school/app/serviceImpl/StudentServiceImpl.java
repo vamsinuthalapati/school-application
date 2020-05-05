@@ -23,7 +23,10 @@ public class StudentServiceImpl implements StudentService {
 	@Autowired
 	private StudentRepository studentRepository;
 
+	@Autowired
 	private AttendanceRepository attendanceRepository;
+	
+	
 
 	@Override
 	public ResponseObject login(LoginRequest stdLogin) {
@@ -44,11 +47,12 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public ResponseObject register(StudentRegister stdRegister) {
 
+		List<Student> students = studentRepository.findAll();
 		if (stdRegister != null) {
 
-			List<Student> students = studentRepository.findAll();
+			
 			for (Student student : students) {
-				if (stdRegister.getRollNumber().equals(student.getRollNumber())) {
+				if (!stdRegister.getRollNumber().equals(student.getRollNumber())) {
 					Student newStudent = new Student(UUID.randomUUID().toString(), stdRegister.getRollNumber(),
 							Calendar.getInstance(), Calendar.getInstance(), stdRegister.getName(),
 							stdRegister.getDateOfBirth(), stdRegister.getPassword(), "+91",
@@ -59,6 +63,8 @@ public class StudentServiceImpl implements StudentService {
 					Attendance attendance = new Attendance(Calendar.getInstance(), stdRegister.getRollNumber(),
 							stdRegister.getClassName(), stdRegister.getSection(), false, newStudent);
 					attendanceRepository.saveAndFlush(attendance);
+					
+					return new ResponseObject( "", "student created", HttpStatus.OK);
 				}
 				return new ResponseObject(null, "You have already registered, please login", HttpStatus.BAD_REQUEST);
 			}

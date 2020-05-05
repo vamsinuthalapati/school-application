@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webapplication.school.app.domain.LoginRequest;
 import com.webapplication.school.app.domain.ResponseObject;
+import com.webapplication.school.app.domain.TeacherRegister;
 import com.webapplication.school.app.service.TeacherService;
 
 @RestController
@@ -22,7 +23,8 @@ public class TeacherController {
 		return teacherService.teacherLogin(teachLogin);
 	}
 	
-	public ResponseObject teacherRegister() {
-		return null;
+	@PostMapping("/teachRegister")
+	public ResponseObject teacherRegister(@RequestBody TeacherRegister teacherRegister) {
+		return teacherService.teacherRegister(teacherRegister);
 	}
 }

@@ -27,7 +27,7 @@ public class Attendance {
 	private Calendar date;
 	@Column(name = "std_roll_number")
 	private String stdRollNumber;
-	@Column(name = "class_name")
+	@Column(name = "class")
 	private String className;
 	@Column(name = "section")
 	private String section;

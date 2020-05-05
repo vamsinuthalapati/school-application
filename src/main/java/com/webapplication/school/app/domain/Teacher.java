@@ -191,8 +191,29 @@ public class Teacher {
 		this.lastTimeSignedIn = lastTimeSignedIn;
 	}
 	
-	
-	
+	public Teacher(String externalId, String employeeId, Calendar createdOn, Calendar modifiedOn, String name,
+			Calendar dateOfBirth, String password, String countryCode, String contactNumber, String email,
+			String gender, String className, String section, String subject, Boolean isContactVerified,
+			Boolean isEmailVerified, Calendar lastTimeSignedIn) {
+		super();
+		this.externalId = externalId;
+		this.employeeId = employeeId;
+		this.createdOn = createdOn;
+		this.modifiedOn = modifiedOn;
+		this.name = name;
+		this.dateOfBirth = dateOfBirth;
+		this.password = password;
+		this.countryCode = countryCode;
+		this.contactNumber = contactNumber;
+		this.email = email;
+		this.gender = gender;
+		this.className = className;
+		this.section = section;
+		this.subject = subject;
+		this.isContactVerified = isContactVerified;
+		this.isEmailVerified = isEmailVerified;
+		this.lastTimeSignedIn = lastTimeSignedIn;
+	}
 	public Teacher() {
 		super();
 	}
