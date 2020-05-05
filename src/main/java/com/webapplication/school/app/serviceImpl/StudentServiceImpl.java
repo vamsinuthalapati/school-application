@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class StudentServiceImpl implements StudentService {
 	@Autowired
 	private AttendanceRepository attendanceRepository;
 	
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class); 
 
 	@Override
 	public ResponseObject login(LoginRequest stdLogin) {
@@ -37,6 +39,7 @@ public class StudentServiceImpl implements StudentService {
 			if (stdLogin.getContactNumber().equals(student.getContactNumber())) {
 				Student studentDetails = new Student();
 				studentDetails = studentRepository.studentLogin(stdLogin.getContactNumber(), stdLogin.getPassword());
+				LOGGER.info("Student login successful");
 				return new ResponseObject(studentDetails.getContactNumber(), "Login successful", HttpStatus.OK);
 			}
 			return new ResponseObject(null, "Your contact number is not registered with us!", HttpStatus.BAD_REQUEST);
@@ -50,7 +53,6 @@ public class StudentServiceImpl implements StudentService {
 		List<Student> students = studentRepository.findAll();
 		if (stdRegister != null) {
 
-			
 			for (Student student : students) {
 				if (!stdRegister.getRollNumber().equals(student.getRollNumber())) {
 					Student newStudent = new Student(UUID.randomUUID().toString(), stdRegister.getRollNumber(),
@@ -60,11 +62,15 @@ public class StudentServiceImpl implements StudentService {
 							stdRegister.getClassName(), stdRegister.getSection(), false, false, Calendar.getInstance());
 					studentRepository.saveAndFlush(newStudent);
 
+					LOGGER.info(""+newStudent);
+					
 					Attendance attendance = new Attendance(Calendar.getInstance(), stdRegister.getRollNumber(),
 							stdRegister.getClassName(), stdRegister.getSection(), false, newStudent);
 					attendanceRepository.saveAndFlush(attendance);
 					
-					return new ResponseObject( "", "student created", HttpStatus.OK);
+					LOGGER.info(""+attendance);
+					
+					return new ResponseObject( null, "student created", HttpStatus.OK);
 				}
 				return new ResponseObject(null, "You have already registered, please login", HttpStatus.BAD_REQUEST);
 			}

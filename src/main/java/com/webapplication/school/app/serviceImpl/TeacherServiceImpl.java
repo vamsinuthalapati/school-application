@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class TeacherServiceImpl implements TeacherService {
 	@Autowired
 	private TeacherRepository teacherRepository;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(TeacherServiceImpl.class);
 	@Override
 	public ResponseObject teacherLogin(LoginRequest teachLogin) {
 
@@ -31,6 +34,7 @@ public class TeacherServiceImpl implements TeacherService {
 				Teacher teacherDetails = new Teacher();
 				teacherDetails = teacherRepository.teacherLogin(teachLogin.getContactNumber(),
 						teachLogin.getPassword());
+				LOGGER.info("Login successful");
 				return new ResponseObject(teacherDetails.getContactNumber(), "Login successful", HttpStatus.OK);
 			}
 			return new ResponseObject(null, "Your contact number is not registered with us!", HttpStatus.BAD_REQUEST);
@@ -50,8 +54,9 @@ public class TeacherServiceImpl implements TeacherService {
 							teacherRegister.getContactNumber(), teacherRegister.getEmail(), teacherRegister.getGender(),
 							teacherRegister.getClassName(), teacherRegister.getSection(), teacherRegister.getSubject(),
 							false, false, Calendar.getInstance());
-
+					
 					teacherRepository.saveAndFlush(teacher);
+					LOGGER.info(""+teacher);
 
 					return new ResponseObject(null, "Teacher account created", HttpStatus.OK);
 				}
