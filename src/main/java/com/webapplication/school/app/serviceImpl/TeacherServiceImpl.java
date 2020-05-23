@@ -41,11 +41,11 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public ResponseObject teacherLogin(LoginRequest teachLogin) {
 
-		Teacher teacher = new Teacher();
-
+		Teacher teacherDetails = new Teacher();
+		teacherDetails = teacherRepository.teacherLogin(teachLogin.getContactNumber(),
+				teachLogin.getPassword());
 		if (teachLogin != null) {
-			if (teachLogin.getContactNumber().equals(teacher.getContactNumber())) {
-				Teacher teacherDetails = new Teacher();
+			if (teachLogin.getContactNumber().equals(teacherDetails.getContactNumber())) {
 				teacherDetails = teacherRepository.teacherLogin(teachLogin.getContactNumber(),
 						teachLogin.getPassword());
 				LOGGER.info("Login successful");
