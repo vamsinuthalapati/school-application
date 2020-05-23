@@ -1,19 +1,11 @@
 package com.webapplication.school.app.domain;
 
-import java.util.Calendar;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "attendance")
@@ -23,21 +15,18 @@ public class Attendance {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private Long id;
-	@Column(name = "date")
-	private Calendar date;
-	@Column(name = "std_roll_number")
-	private String stdRollNumber;
+	@Column(name = "external_id")
+	private String externalId;
+	@Column(name = "roll_number")
+	private String rollNumber;
+	@Column(name = "name")
+	private String name;
 	@Column(name = "class")
 	private String className;
 	@Column(name = "section")
 	private String section;
-	@Column(name = "present")
-	private boolean present;
-	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-	@JoinColumn(name = "std_id")
-	private Student student;
+	@Column(name = "is_present")
+	private boolean isPresent;
 
 	public Long getId() {
 		return id;
@@ -47,20 +36,28 @@ public class Attendance {
 		this.id = id;
 	}
 
-	public Calendar getDate() {
-		return date;
+	public String getExternalId() {
+		return externalId;
 	}
 
-	public void setDate(Calendar date) {
-		this.date = date;
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 
-	public String getStdRollNumber() {
-		return stdRollNumber;
+	public String getRollNumber() {
+		return rollNumber;
 	}
 
-	public void setStdRollNumber(String stdRollNumber) {
-		this.stdRollNumber = stdRollNumber;
+	public void setRollNumber(String rollNumber) {
+		this.rollNumber = rollNumber;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getClassName() {
@@ -80,44 +77,34 @@ public class Attendance {
 	}
 
 	public boolean isPresent() {
-		return present;
+		return isPresent;
 	}
 
-	public void setPresent(boolean present) {
-		this.present = present;
+	public void setPresent(boolean isPresent) {
+		this.isPresent = isPresent;
 	}
 
-	public Student getStudent() {
-		return student;
-	}
-
-	public void setStudent(Student student) {
-		this.student = student;
-	}
-
-	public Attendance(Long id, Calendar date, String stdRollNumber, String className, String section, boolean present,
-			Student student) {
+	public Attendance(Long id, String externalId, String rollNumber, String name, String className, String section,
+			boolean isPresent) {
 		super();
 		this.id = id;
-		this.date = date;
-		this.stdRollNumber = stdRollNumber;
+		this.externalId = externalId;
+		this.rollNumber = rollNumber;
+		this.name = name;
 		this.className = className;
 		this.section = section;
-		this.present = present;
-		this.student = student;
+		this.isPresent = isPresent;
 	}
-	
-	
 
-	public Attendance(Calendar date, String stdRollNumber, String className, String section, boolean present,
-			Student student) {
+	public Attendance(String externalId, String rollNumber, String name, String className, String section,
+			boolean isPresent) {
 		super();
-		this.date = date;
-		this.stdRollNumber = stdRollNumber;
+		this.externalId = externalId;
+		this.rollNumber = rollNumber;
+		this.name = name;
 		this.className = className;
 		this.section = section;
-		this.present = present;
-		this.student = student;
+		this.isPresent = isPresent;
 	}
 
 	public Attendance() {
@@ -126,9 +113,8 @@ public class Attendance {
 
 	@Override
 	public String toString() {
-		return "Attendance [id=" + id + ", date=" + date + ", stdRollNumber=" + stdRollNumber + ", className="
-				+ className + ", section=" + section + ", present=" + present + ", student=" + student + "]";
+		return "Attendance [id=" + id + ", externalId=" + externalId + ", rollNumber=" + rollNumber + ", name=" + name
+				+ ", className=" + className + ", section=" + section + ", isPresent=" + isPresent + "]";
 	}
-	
-	
+
 }

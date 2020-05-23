@@ -12,9 +12,12 @@ import com.webapplication.school.app.domain.Student;
 public interface StudentRepository extends JpaRepository<Student, Long>{
 
 	@Query("select s from Student s "
-			+ "where contactNumber = :contactNumber and password = :password and s.isContactVerified = true")
+			+ "where s.contactNumber = :contactNumber and s.password = :password and s.isContactVerified = true")
 	public Student studentLogin(String contactNumber, String password);
 
 	@Query("select s from Student s")
 	public List<Student> findAll();
+	
+	@Query("select s from Student s where s.className = :className and s.section = :section")
+	public List<Student> takeAttend(String className, String section);
 }

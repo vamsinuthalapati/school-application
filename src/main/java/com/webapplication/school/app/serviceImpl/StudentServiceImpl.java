@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.webapplication.school.app.domain.Attendance;
 import com.webapplication.school.app.domain.LoginRequest;
+import com.webapplication.school.app.domain.Register;
 import com.webapplication.school.app.domain.ResponseObject;
 import com.webapplication.school.app.domain.Student;
 import com.webapplication.school.app.domain.StudentRegister;
-import com.webapplication.school.app.repository.AttendanceRepository;
+import com.webapplication.school.app.repository.RegisterRepository;
 import com.webapplication.school.app.repository.StudentRepository;
 import com.webapplication.school.app.service.StudentService;
 
@@ -24,10 +24,9 @@ public class StudentServiceImpl implements StudentService {
 
 	@Autowired
 	private StudentRepository studentRepository;
-
-	@Autowired
-	private AttendanceRepository attendanceRepository;
 	
+	private RegisterRepository registerRepository;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class); 
 
 	@Override
@@ -64,11 +63,12 @@ public class StudentServiceImpl implements StudentService {
 
 					LOGGER.info(""+newStudent);
 					
-					Attendance attendance = new Attendance(Calendar.getInstance(), stdRegister.getRollNumber(),
-							stdRegister.getClassName(), stdRegister.getSection(), false, newStudent);
-					attendanceRepository.saveAndFlush(attendance);
+					Register register = new Register(UUID.randomUUID().toString(), Calendar.getInstance(), stdRegister.getName(),
+							stdRegister.getDateOfBirth(), stdRegister.getGender(), "+91", stdRegister.getContactNumber(),
+							stdRegister.getEmail());
+					registerRepository.saveAndFlush(register);
 					
-					LOGGER.info(""+attendance);
+					LOGGER.info("new registration - "+register);
 					
 					return new ResponseObject( null, "student created", HttpStatus.OK);
 				}

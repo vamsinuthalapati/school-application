@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webapplication.school.app.domain.AttendanceRequest;
 import com.webapplication.school.app.domain.LoginRequest;
 import com.webapplication.school.app.domain.ResponseObject;
 import com.webapplication.school.app.domain.TeacherRegister;
@@ -26,5 +27,10 @@ public class TeacherController {
 	@PostMapping("/teachRegister")
 	public ResponseObject teacherRegister(@RequestBody TeacherRegister teacherRegister) {
 		return teacherService.teacherRegister(teacherRegister);
+	}
+	
+	@PostMapping("/takeAttend")
+	public ResponseObject takeAttendance(@RequestBody AttendanceRequest attendanceRequest) {
+		return teacherService.studentAttendance(attendanceRequest);
 	}
 }

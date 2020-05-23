@@ -10,10 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.webapplication.school.app.domain.Attendance;
+import com.webapplication.school.app.domain.AttendanceRequest;
 import com.webapplication.school.app.domain.LoginRequest;
 import com.webapplication.school.app.domain.ResponseObject;
+import com.webapplication.school.app.domain.Student;
 import com.webapplication.school.app.domain.Teacher;
 import com.webapplication.school.app.domain.TeacherRegister;
+import com.webapplication.school.app.repository.AttendanceRepository;
+import com.webapplication.school.app.repository.StudentRepository;
 import com.webapplication.school.app.repository.TeacherRepository;
 import com.webapplication.school.app.service.TeacherService;
 
@@ -23,7 +28,16 @@ public class TeacherServiceImpl implements TeacherService {
 	@Autowired
 	private TeacherRepository teacherRepository;
 
+	@Autowired
+	private AttendanceRepository attendanceRepository;
+	
+	@Autowired
+	private StudentRepository studentRepository;
+
+	private AttendanceServiceImpl attendanceServiceImpl;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(TeacherServiceImpl.class);
+
 	@Override
 	public ResponseObject teacherLogin(LoginRequest teachLogin) {
 
@@ -54,9 +68,9 @@ public class TeacherServiceImpl implements TeacherService {
 							teacherRegister.getContactNumber(), teacherRegister.getEmail(), teacherRegister.getGender(),
 							teacherRegister.getClassName(), teacherRegister.getSection(), teacherRegister.getSubject(),
 							false, false, Calendar.getInstance());
-					
+
 					teacherRepository.saveAndFlush(teacher);
-					LOGGER.info(""+teacher);
+					LOGGER.info("" + teacher);
 
 					return new ResponseObject(null, "Teacher account created", HttpStatus.OK);
 				}
@@ -66,4 +80,22 @@ public class TeacherServiceImpl implements TeacherService {
 		return new ResponseObject(null, "Something went wrong! please refresh the page", HttpStatus.OK);
 	}
 
+	@Override
+	public ResponseObject studentAttendance(AttendanceRequest attendanceRequest) {
+
+		List<Student> students = studentRepository.takeAttend(attendanceRequest.getClassName(),
+				attendanceRequest.getSeciton());
+		if (students != null) {
+			for (Student student : students) {
+				if (student.getRollNumber().equalsIgnoreCase(attendanceRequest.getRollNumber())) {
+					Attendance attendance = new Attendance(UUID.randomUUID().toString(), student.getRollNumber(),
+							student.getName(), student.getClassName(), student.getSection(),
+							attendanceRequest.getIsPresent());
+					attendanceRepository.saveAndFlush(attendance);
+				}
+				return new ResponseObject(null, "Roll Number not found", HttpStatus.BAD_REQUEST);
+			}
+		}
+		return new ResponseObject(null, "No students assigned to your class", HttpStatus.BAD_REQUEST);
+	}
 }
