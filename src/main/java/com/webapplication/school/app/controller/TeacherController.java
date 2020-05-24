@@ -2,6 +2,7 @@ package com.webapplication.school.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import com.webapplication.school.app.domain.AttendanceRequest;
 import com.webapplication.school.app.domain.LoginRequest;
 import com.webapplication.school.app.domain.ResponseObject;
 import com.webapplication.school.app.domain.TeacherRegister;
+import com.webapplication.school.app.domain.UpdatePassword;
 import com.webapplication.school.app.service.TeacherService;
 
 @RestController
@@ -32,5 +34,10 @@ public class TeacherController {
 	@PostMapping("/takeAttend")
 	public ResponseObject takeAttendance(@RequestBody AttendanceRequest attendanceRequest) {
 		return teacherService.studentAttendance(attendanceRequest);
+	}
+	
+	@PutMapping("/updPwd")
+	public ResponseObject updateTeacherPassword(@RequestBody UpdatePassword updatePassword) {
+		return teacherService.updatePwd(updatePassword);
 	}
 }

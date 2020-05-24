@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -16,9 +18,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Register {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
-	private Long id;
 	@Column(name = "external_id")
 	private String externalId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
@@ -36,14 +35,6 @@ public class Register {
 	private String contantNumber;
 	@Column(name = "email")
 	private String email;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getExternalId() {
 		return externalId;
@@ -109,20 +100,6 @@ public class Register {
 		this.email = email;
 	}
 
-	public Register(Long id, String externalId, Calendar joiningDate, String name, Calendar dateOfBirth, String gender,
-			String countryCode, String contantNumber, String email) {
-		super();
-		this.id = id;
-		this.externalId = externalId;
-		this.joiningDate = joiningDate;
-		this.name = name;
-		this.dateOfBirth = dateOfBirth;
-		this.gender = gender;
-		this.countryCode = countryCode;
-		this.contantNumber = contantNumber;
-		this.email = email;
-	}
-
 	public Register(String externalId, Calendar joiningDate, String name, Calendar dateOfBirth, String gender,
 			String countryCode, String contantNumber, String email) {
 		super();
@@ -142,7 +119,7 @@ public class Register {
 
 	@Override
 	public String toString() {
-		return "Register [id=" + id + ", externalId=" + externalId + ", joiningDate=" + joiningDate + ", name=" + name
+		return "Register [externalId=" + externalId + ", joiningDate=" + joiningDate + ", name=" + name
 				+ ", dateOfBirth=" + dateOfBirth + ", gender=" + gender + ", countryCode=" + countryCode
 				+ ", contantNumber=" + contantNumber + ", email=" + email + "]";
 	}

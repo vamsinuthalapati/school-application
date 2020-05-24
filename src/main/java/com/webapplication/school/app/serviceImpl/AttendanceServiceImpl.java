@@ -17,10 +17,7 @@ public class AttendanceServiceImpl implements AttendanceService{
 	@Override
 	public ResponseObject attendance(AttendanceRequest attendanceRequest) {
 		if(attendanceRequest != null) {
-			Attendance attendance = new AttendanceRequest(attendanceRequest.getRollNumber(), attendanceRequest.getName(),
-					attendanceRequest.getClassName(), attendanceRequest.getSeciton(), attendanceRequest.getIsPresent());
 			
-			attendanceRepository.saveAndFlush(attendance);
 		}
 		return new ResponseObject(null, "Something went wrong! please try refreshing the page", HttpStatus.BAD_REQUEST);
 	}

@@ -2,6 +2,7 @@ package com.webapplication.school.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.webapplication.school.app.domain.LoginRequest;
 import com.webapplication.school.app.domain.ResponseObject;
 import com.webapplication.school.app.domain.StudentRegister;
+import com.webapplication.school.app.domain.UpdatePassword;
 import com.webapplication.school.app.service.StudentService;
 
 @RestController
@@ -26,6 +28,11 @@ public class StudentController {
 	@PostMapping("/stdRegister")
 	public ResponseObject studentRegister(@RequestBody StudentRegister studentRegister) {
 		return studentService.register(studentRegister);
+	}
+	
+	@PutMapping("/updPwdStd")
+	public ResponseObject updateTeacherPassword(@RequestBody UpdatePassword updatePassword) {
+		return studentService.updatePwd(updatePassword);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.webapplication.school.app.domain;
 
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,16 +9,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "attendance")
 public class Attendance {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
-	private Long id;
 	@Column(name = "external_id")
 	private String externalId;
+	@Column(name = "today_date")
+	private Calendar todayDate;
 	@Column(name = "roll_number")
 	private String rollNumber;
 	@Column(name = "name")
@@ -28,20 +31,20 @@ public class Attendance {
 	@Column(name = "is_present")
 	private boolean isPresent;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getExternalId() {
 		return externalId;
 	}
 
 	public void setExternalId(String externalId) {
 		this.externalId = externalId;
+	}
+
+	public Calendar getTodayDate() {
+		return todayDate;
+	}
+
+	public void setTodayDate(Calendar todayDate) {
+		this.todayDate = todayDate;
 	}
 
 	public String getRollNumber() {
@@ -84,37 +87,23 @@ public class Attendance {
 		this.isPresent = isPresent;
 	}
 
-	public Attendance(Long id, String externalId, String rollNumber, String name, String className, String section,
-			boolean isPresent) {
+	public Attendance(String externalId, Calendar todayDate, String rollNumber, String name, String className,
+			String section, boolean isPresent) {
 		super();
-		this.id = id;
 		this.externalId = externalId;
+		this.todayDate = todayDate;
 		this.rollNumber = rollNumber;
 		this.name = name;
 		this.className = className;
 		this.section = section;
 		this.isPresent = isPresent;
-	}
-
-	public Attendance(String externalId, String rollNumber, String name, String className, String section,
-			boolean isPresent) {
-		super();
-		this.externalId = externalId;
-		this.rollNumber = rollNumber;
-		this.name = name;
-		this.className = className;
-		this.section = section;
-		this.isPresent = isPresent;
-	}
-
-	public Attendance() {
-		super();
 	}
 
 	@Override
 	public String toString() {
-		return "Attendance [id=" + id + ", externalId=" + externalId + ", rollNumber=" + rollNumber + ", name=" + name
-				+ ", className=" + className + ", section=" + section + ", isPresent=" + isPresent + "]";
+		return "Attendance [externalId=" + externalId + ", todayDate=" + todayDate + ", rollNumber=" + rollNumber
+				+ ", name=" + name + ", className=" + className + ", section=" + section + ", isPresent=" + isPresent
+				+ "]";
 	}
 
 }

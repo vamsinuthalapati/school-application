@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -16,9 +18,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Student {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
-	private Long id;
 	@Column(name = "external_id")
 	private String externalId;
 	@Column(name = "roll_number")
@@ -52,133 +51,135 @@ public class Student {
 	private Boolean isEmailVerified;
 	@Column(name = "last_time_signed_in")
 	private Calendar lastTimeSignedIn;
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public String getExternalId() {
 		return externalId;
 	}
+
 	public void setExternalId(String externalId) {
 		this.externalId = externalId;
 	}
+
 	public String getRollNumber() {
 		return rollNumber;
 	}
+
 	public void setRollNumber(String rollNumber) {
 		this.rollNumber = rollNumber;
 	}
+
 	public Calendar getCreatedOn() {
 		return createdOn;
 	}
+
 	public void setCreatedOn(Calendar createdOn) {
 		this.createdOn = createdOn;
 	}
+
 	public Calendar getModifiedOn() {
 		return modifiedOn;
 	}
+
 	public void setModifiedOn(Calendar modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public Calendar getDateOfBirth() {
 		return dateOfBirth;
 	}
+
 	public void setDateOfBirth(Calendar dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public String getCountryCode() {
 		return countryCode;
 	}
+
 	public void setCountryCode(String countryCode) {
 		this.countryCode = countryCode;
 	}
+
 	public String getContactNumber() {
 		return contactNumber;
 	}
+
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getGender() {
 		return gender;
 	}
+
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+
 	public String getClassName() {
 		return className;
 	}
+
 	public void setClassName(String className) {
 		this.className = className;
 	}
+
 	public String getSection() {
 		return section;
 	}
+
 	public void setSection(String section) {
 		this.section = section;
 	}
+
 	public Boolean getIsContactVerified() {
 		return isContactVerified;
 	}
+
 	public void setIsContactVerified(Boolean isContactVerified) {
 		this.isContactVerified = isContactVerified;
 	}
+
 	public Boolean getIsEmailVerified() {
 		return isEmailVerified;
 	}
+
 	public void setIsEmailVerified(Boolean isEmailVerified) {
 		this.isEmailVerified = isEmailVerified;
 	}
+
 	public Calendar getLastTimeSignedIn() {
 		return lastTimeSignedIn;
 	}
+
 	public void setLastTimeSignedIn(Calendar lastTimeSignedIn) {
 		this.lastTimeSignedIn = lastTimeSignedIn;
 	}
-	public Student(Long id, String externalId, String rollNumber, Calendar createdOn, Calendar modifiedOn, String name,
-			Calendar dateOfBirth, String password, String countryCode, String contactNumber, String email,
-			String gender, String className, String section, Boolean isContactVerified, Boolean isEmailVerified,
-			Calendar lastTimeSignedIn) {
-		super();
-		this.id = id;
-		this.externalId = externalId;
-		this.rollNumber = rollNumber;
-		this.createdOn = createdOn;
-		this.modifiedOn = modifiedOn;
-		this.name = name;
-		this.dateOfBirth = dateOfBirth;
-		this.password = password;
-		this.countryCode = countryCode;
-		this.contactNumber = contactNumber;
-		this.email = email;
-		this.gender = gender;
-		this.className = className;
-		this.section = section;
-		this.isContactVerified = isContactVerified;
-		this.isEmailVerified = isEmailVerified;
-		this.lastTimeSignedIn = lastTimeSignedIn;
-	}
-	
+
 	public Student(String externalId, String rollNumber, Calendar createdOn, Calendar modifiedOn, String name,
 			Calendar dateOfBirth, String password, String countryCode, String contactNumber, String email,
 			String gender, String className, String section, Boolean isContactVerified, Boolean isEmailVerified,
@@ -201,21 +202,19 @@ public class Student {
 		this.isEmailVerified = isEmailVerified;
 		this.lastTimeSignedIn = lastTimeSignedIn;
 	}
+
 	public Student() {
 		super();
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", externalId=" + externalId + ", rollNumber=" + rollNumber + ", createdOn="
-				+ createdOn + ", modifiedOn=" + modifiedOn + ", name=" + name + ", dateOfBirth=" + dateOfBirth
-				+ ", password=" + password + ", countryCode=" + countryCode + ", contactNumber=" + contactNumber
-				+ ", email=" + email + ", gender=" + gender + ", className=" + className + ", section=" + section
-				+ ", isContactVerified=" + isContactVerified + ", isEmailVerified=" + isEmailVerified
-				+ ", lastTimeSignedIn=" + lastTimeSignedIn + "]";
+		return "Student [externalId=" + externalId + ", rollNumber=" + rollNumber + ", createdOn=" + createdOn
+				+ ", modifiedOn=" + modifiedOn + ", name=" + name + ", dateOfBirth=" + dateOfBirth + ", password="
+				+ password + ", countryCode=" + countryCode + ", contactNumber=" + contactNumber + ", email=" + email
+				+ ", gender=" + gender + ", className=" + className + ", section=" + section + ", isContactVerified="
+				+ isContactVerified + ", isEmailVerified=" + isEmailVerified + ", lastTimeSignedIn=" + lastTimeSignedIn
+				+ "]";
 	}
-	
 
-		
-	
 }

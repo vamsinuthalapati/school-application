@@ -6,6 +6,7 @@ import com.webapplication.school.app.domain.AttendanceRequest;
 import com.webapplication.school.app.domain.LoginRequest;
 import com.webapplication.school.app.domain.ResponseObject;
 import com.webapplication.school.app.domain.TeacherRegister;
+import com.webapplication.school.app.domain.UpdatePassword;
 
 @Service
 public interface TeacherService {
@@ -16,5 +17,6 @@ public interface TeacherService {
 	
 	public ResponseObject studentAttendance(AttendanceRequest attendanceRequest);
 	
+	public ResponseObject updatePwd(UpdatePassword updatePassword);
 	
 }

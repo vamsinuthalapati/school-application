@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.webapplication.school.app.domain.Attendance;
 
 @Repository
-public interface AttendanceRepository extends JpaRepository<Attendance, Long>{
+public interface AttendanceRepository extends JpaRepository<Attendance, String>{
 
 }

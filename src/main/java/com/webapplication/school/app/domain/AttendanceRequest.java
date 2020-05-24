@@ -1,11 +1,13 @@
 package com.webapplication.school.app.domain;
 
-public class AttendanceRequest extends Attendance{
+import java.util.Calendar;
+
+public class AttendanceRequest {
 
 	private String rollNumber;
 	private String name;
 	private String className;
-	private String seciton;
+	private String section;
 	private boolean isPresent;
 
 	public String getRollNumber() {
@@ -32,39 +34,36 @@ public class AttendanceRequest extends Attendance{
 		this.className = className;
 	}
 
-	public String getSeciton() {
-		return seciton;
+	public String getSection() {
+		return section;
 	}
 
-	public void setSeciton(String seciton) {
-		this.seciton = seciton;
+	public void setSection(String section) {
+		this.section = section;
 	}
 
-	public boolean getIsPresent() {
+	public boolean isPresent() {
 		return isPresent;
 	}
 
-	public void setIsPresent(boolean isPresent) {
+	public void setPresent(boolean isPresent) {
 		this.isPresent = isPresent;
 	}
 
-	public AttendanceRequest(String rollNumber, String name, String className, String seciton, boolean isPresent) {
+	public AttendanceRequest(String rollNumber, String name, String className, String section, boolean isPresent) {
 		super();
 		this.rollNumber = rollNumber;
 		this.name = name;
 		this.className = className;
-		this.seciton = seciton;
+		this.section = section;
 		this.isPresent = isPresent;
-	}
-
-	public AttendanceRequest() {
-		super();
 	}
 
 	@Override
 	public String toString() {
 		return "AttendanceRequest [rollNumber=" + rollNumber + ", name=" + name + ", className=" + className
-				+ ", seciton=" + seciton + ", isPresent=" + isPresent + "]";
+				+ ", section=" + section + ", isPresent=" + isPresent + "]";
 	}
 
+	
 }
