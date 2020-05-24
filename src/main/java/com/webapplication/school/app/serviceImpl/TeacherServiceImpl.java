@@ -61,23 +61,39 @@ public class TeacherServiceImpl implements TeacherService {
 	public ResponseObject teacherRegister(TeacherRegister teacherRegister) {
 
 		List<Teacher> teachers = teacherRepository.findAll();
-		if (teacherRegister != null) {
-			for (Teacher teach : teachers) {
-				if (!teacherRegister.getEmployeeId().equals(teach.getEmployeeId())) {
-					Teacher teacher = new Teacher(UUID.randomUUID().toString(), teacherRegister.getEmployeeId(),
-							Calendar.getInstance(), Calendar.getInstance(), teacherRegister.getName(),
-							teacherRegister.getDateOfBirth(), teacherRegister.getPassword(), "+91",
-							teacherRegister.getContactNumber(), teacherRegister.getEmail(), teacherRegister.getGender(),
-							teacherRegister.getClassName(), teacherRegister.getSection(), teacherRegister.getSubject(),
-							false, false, Calendar.getInstance());
+		if (!teachers.isEmpty()) {
+			if (teacherRegister != null) {
+				for (Teacher teach : teachers) {
+					if (!teacherRegister.getEmployeeId().equals(teach.getEmployeeId())) {
+						Teacher teacher = new Teacher(UUID.randomUUID().toString(), teacherRegister.getEmployeeId(),
+								Calendar.getInstance(), Calendar.getInstance(), teacherRegister.getName(),
+								teacherRegister.getDateOfBirth(), teacherRegister.getPassword(), "+91",
+								teacherRegister.getContactNumber(), teacherRegister.getEmail(),
+								teacherRegister.getGender(), teacherRegister.getClassName(),
+								teacherRegister.getSection(), teacherRegister.getSubject(), false, false,
+								Calendar.getInstance());
 
-					teacherRepository.saveAndFlush(teacher);
-					LOGGER.info("" + teacher);
+						teacherRepository.saveAndFlush(teacher);
+						LOGGER.info("" + teacher);
 
-					return new ResponseObject(null, "Teacher account created", HttpStatus.OK);
+						return new ResponseObject(null, "Teacher account created", HttpStatus.OK);
+					}
+					return new ResponseObject(null, "You have already registered, please login",
+							HttpStatus.BAD_REQUEST);
 				}
-				return new ResponseObject(null, "You have already registered, please login", HttpStatus.BAD_REQUEST);
 			}
+		} else {
+			Teacher teacher = new Teacher(UUID.randomUUID().toString(), teacherRegister.getEmployeeId(),
+					Calendar.getInstance(), Calendar.getInstance(), teacherRegister.getName(),
+					teacherRegister.getDateOfBirth(), teacherRegister.getPassword(), "+91",
+					teacherRegister.getContactNumber(), teacherRegister.getEmail(), teacherRegister.getGender(),
+					teacherRegister.getClassName(), teacherRegister.getSection(), teacherRegister.getSubject(), false,
+					false, Calendar.getInstance());
+
+			teacherRepository.saveAndFlush(teacher);
+			LOGGER.info("" + teacher);
+
+			return new ResponseObject(null, "Teacher account created", HttpStatus.OK);
 		}
 		return new ResponseObject(null, "Something went wrong! please refresh the page", HttpStatus.OK);
 	}
@@ -89,8 +105,8 @@ public class TeacherServiceImpl implements TeacherService {
 		if (students != null) {
 			for (Student student : students) {
 				if (student.getRollNumber().equalsIgnoreCase(attendanceRequest.getRollNumber())) {
-					Attendance attendance = new Attendance(UUID.randomUUID().toString(), Calendar.getInstance(), student.getRollNumber(),
-							student.getName(), student.getClassName(), student.getSection(),
+					Attendance attendance = new Attendance(UUID.randomUUID().toString(), Calendar.getInstance(),
+							student.getRollNumber(), student.getName(), student.getClassName(), student.getSection(),
 							attendanceRequest.isPresent());
 					attendanceRepository.saveAndFlush(attendance);
 					return new ResponseObject("Attendance taken successfully", null, HttpStatus.OK);

@@ -34,13 +34,13 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public ResponseObject login(LoginRequest stdLogin) {
-		
+
 		Student studentDetails = new Student();
 		studentDetails = studentRepository.studentLogin(stdLogin.getContactNumber(), stdLogin.getPassword());
-		
+
 		if (stdLogin != null) {
 			if (stdLogin.getContactNumber().equals(studentDetails.getContactNumber())) {
-				
+
 				LOGGER.info("Student login successful");
 				return new ResponseObject(studentDetails.getContactNumber(), "Login successful", HttpStatus.OK);
 			}
@@ -53,16 +53,41 @@ public class StudentServiceImpl implements StudentService {
 	public ResponseObject register(StudentRegister stdRegister) {
 
 		List<Student> students = studentRepository.findAll();
-		if (stdRegister != null) {
+		if (!students.isEmpty()) {
+			if (stdRegister != null) {
 
-			for (Student student : students) {
-				if (!stdRegister.getRollNumber().equals(student.getRollNumber())) {
+				for (Student student : students) {
+					if (!stdRegister.getRollNumber().equals(student.getRollNumber())) {
+						Student newStudent = new Student(UUID.randomUUID().toString(), stdRegister.getRollNumber(),
+								Calendar.getInstance(), Calendar.getInstance(), stdRegister.getName(),
+								stdRegister.getDateOfBirth(), stdRegister.getPassword(), "+91",
+								stdRegister.getContactNumber(), stdRegister.getEmail(), stdRegister.getGender(),
+								stdRegister.getClassName(), stdRegister.getSection(), false, false,
+								Calendar.getInstance());
+
+						studentRepository.saveAndFlush(newStudent);
+						LOGGER.info("" + newStudent);
+
+						Register register = new Register(UUID.randomUUID().toString(), Calendar.getInstance(),
+								stdRegister.getName(), stdRegister.getDateOfBirth(), stdRegister.getGender(), "+91",
+								stdRegister.getContactNumber(), stdRegister.getEmail());
+						registerRepository.saveAndFlush(register);
+
+						LOGGER.info("new registration - " + register);
+
+						return new ResponseObject(null, "student created", HttpStatus.OK);
+					}
+					return new ResponseObject(null, "You have already registered, please login",
+							HttpStatus.BAD_REQUEST);
+				}
+			}
+		} else {
 			Student newStudent = new Student(UUID.randomUUID().toString(), stdRegister.getRollNumber(),
 					Calendar.getInstance(), Calendar.getInstance(), stdRegister.getName(), stdRegister.getDateOfBirth(),
 					stdRegister.getPassword(), "+91", stdRegister.getContactNumber(), stdRegister.getEmail(),
 					stdRegister.getGender(), stdRegister.getClassName(), stdRegister.getSection(), false, false,
 					Calendar.getInstance());
-			
+
 			studentRepository.saveAndFlush(newStudent);
 			LOGGER.info("" + newStudent);
 
@@ -70,15 +95,10 @@ public class StudentServiceImpl implements StudentService {
 					stdRegister.getName(), stdRegister.getDateOfBirth(), stdRegister.getGender(), "+91",
 					stdRegister.getContactNumber(), stdRegister.getEmail());
 			registerRepository.saveAndFlush(register);
-			
-			
+
 			LOGGER.info("new registration - " + register);
 
 			return new ResponseObject(null, "student created", HttpStatus.OK);
-		}
-		return new ResponseObject(null, "You have already registered, please login", HttpStatus.BAD_REQUEST);
-			}
-
 		}
 		return new ResponseObject(null, "Something went wrong! Please try refreshing the page", HttpStatus.BAD_REQUEST);
 	}
