@@ -10,14 +10,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webapplication.school.app.domain.Student;
-import com.webapplication.school.app.domain.Teacher;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, String>{
 
 	@Query(value = "select s from Student s "
-			+ "where s.contactNumber = :contactNumber and s.password = :password and s.isContactVerified = true", nativeQuery = false)
-	public Student studentLogin(String contactNumber, String password);
+			+ "where s.rollNumber = :userId and s.password = :password and s.isContactVerified = true", nativeQuery = false)
+	public Student studentLogin(String userId, String password);
 
 	@Query(value = "select s from Student s", nativeQuery = false)
 	public List<Student> findAll();

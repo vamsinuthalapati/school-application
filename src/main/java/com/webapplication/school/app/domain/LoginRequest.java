@@ -2,32 +2,34 @@ package com.webapplication.school.app.domain;
 
 public class LoginRequest {
 
-	private String contactNumber;
+	private String userId;
 	private String password;
-	
-	public String getContactNumber() {
-		return contactNumber;
+
+	public String getUserId() {
+		return userId;
 	}
-	public void setContactNumber(String contactNumber) {
-		this.contactNumber = contactNumber;
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	public LoginRequest(String contactNumber, String password) {
+
+	public LoginRequest(String userId, String password) {
 		super();
-		this.contactNumber = contactNumber;
+		this.userId = userId;
 		this.password = password;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "LoginRequest [contactNumber=" + contactNumber + ", password=" + password + "]";
+		return "LoginRequest [userId=" + userId + ", password=" + password + "]";
 	}
-	
-	
+
 }

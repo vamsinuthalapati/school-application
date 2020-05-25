@@ -1,7 +1,5 @@
 package com.webapplication.school.app.domain;
 
-import java.util.Calendar;
-
 public class AttendanceRequest {
 
 	private String rollNumber;

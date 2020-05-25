@@ -9,14 +9,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.webapplication.school.app.domain.Student;
 import com.webapplication.school.app.domain.Teacher;
 
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, String> {
 
-	@Query(value = "select t from Teacher t where t.contactNumber = :contactNumber and t.password = :password")
-	public Teacher teacherLogin(String contactNumber, String password);
+	@Query(value = "select t from Teacher t where t.employeeId = :userId and t.password = :password")
+	public Teacher teacherLogin(String userId, String password);
 
 	@Query(value = "select t from Teacher t ")
 	public List<Teacher> findAll();

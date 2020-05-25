@@ -15,7 +15,6 @@ import com.webapplication.school.app.domain.Register;
 import com.webapplication.school.app.domain.ResponseObject;
 import com.webapplication.school.app.domain.Student;
 import com.webapplication.school.app.domain.StudentRegister;
-import com.webapplication.school.app.domain.Teacher;
 import com.webapplication.school.app.domain.UpdatePassword;
 import com.webapplication.school.app.repository.RegisterRepository;
 import com.webapplication.school.app.repository.StudentRepository;
@@ -36,13 +35,13 @@ public class StudentServiceImpl implements StudentService {
 	public ResponseObject login(LoginRequest stdLogin) {
 
 		Student studentDetails = new Student();
-		studentDetails = studentRepository.studentLogin(stdLogin.getContactNumber(), stdLogin.getPassword());
+		studentDetails = studentRepository.studentLogin(stdLogin.getUserId(), stdLogin.getPassword());
 
 		if (stdLogin != null) {
-			if (stdLogin.getContactNumber().equals(studentDetails.getContactNumber())) {
+			if (stdLogin.getUserId().equals(studentDetails.getRollNumber())) {
 
 				LOGGER.info("Student login successful");
-				return new ResponseObject(studentDetails.getContactNumber(), "Login successful", HttpStatus.OK);
+				return new ResponseObject(studentDetails.getRollNumber(), "Login successful", HttpStatus.OK);
 			}
 			return new ResponseObject(null, "Your contact number is not registered with us!", HttpStatus.BAD_REQUEST);
 		}

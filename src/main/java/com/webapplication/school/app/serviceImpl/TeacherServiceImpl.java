@@ -8,11 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.webapplication.school.app.domain.Attendance;
 import com.webapplication.school.app.domain.AttendanceRequest;
 import com.webapplication.school.app.domain.LoginRequest;
@@ -44,13 +40,13 @@ public class TeacherServiceImpl implements TeacherService {
 	public ResponseObject teacherLogin(LoginRequest teachLogin) {
 
 		Teacher teacherDetails = new Teacher();
-		teacherDetails = teacherRepository.teacherLogin(teachLogin.getContactNumber(), teachLogin.getPassword());
+		teacherDetails = teacherRepository.teacherLogin(teachLogin.getUserId(), teachLogin.getPassword());
 		if (teachLogin != null) {
-			if (teachLogin.getContactNumber().equals(teacherDetails.getContactNumber())) {
-				teacherDetails = teacherRepository.teacherLogin(teachLogin.getContactNumber(),
+			if (teachLogin.getUserId().equals(teacherDetails.getEmployeeId())) {
+				teacherDetails = teacherRepository.teacherLogin(teachLogin.getUserId(),
 						teachLogin.getPassword());
 				LOGGER.info("Login successful");
-				return new ResponseObject(teacherDetails.getContactNumber(), "Login successful", HttpStatus.OK);
+				return new ResponseObject(teacherDetails.getEmployeeId(), "Login successful", HttpStatus.OK);
 			}
 			return new ResponseObject(null, "Your contact number is not registered with us!", HttpStatus.BAD_REQUEST);
 		}
