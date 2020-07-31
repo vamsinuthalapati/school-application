@@ -2,6 +2,7 @@ package com.webapplication.school.app.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -25,6 +26,7 @@ import com.webapplication.school.app.serviceImpl.CustomUserDetailsService;
 @EnableWebSecurity
 //@EnableJpaRepositories(basePackageClasses = UserRepository.class)
 @Configuration
+@EnableOAuth2Sso
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
@@ -69,11 +71,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.csrf().disable()
-					.authorizeRequests().antMatchers("/app/v1/userLogin").permitAll()
-					.anyRequest().authenticated()
-					.and().sessionManagement()
-					.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+					.authorizeRequests().antMatchers("/app/v1/userLogin", "/app/v1/uploadFile", "/app/v1/deleteFile").permitAll()
+					.anyRequest().authenticated();
+//					.and().sessionManagement()
+//					.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
     private PasswordEncoder getPasswordEncoder() {
