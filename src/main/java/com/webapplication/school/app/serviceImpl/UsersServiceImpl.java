@@ -77,7 +77,3 @@ public class UsersServiceImpl implements UsersService{
 		return new ResponseObject(null, "Something went wrong! please check your credentials", HttpStatus.BAD_REQUEST);
 	}
 
-public void hello(){
-
-
-}
