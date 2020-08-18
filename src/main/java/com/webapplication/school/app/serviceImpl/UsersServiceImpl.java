@@ -35,7 +35,9 @@ public class UsersServiceImpl implements UsersService{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UsersServiceImpl.class);
 
-	
+	/*
+	* Author : vamsinuthalapati (github)
+	*/
 	@Override
 	public ResponseObject login(LoginRequest userLogin) throws Exception {
 		
