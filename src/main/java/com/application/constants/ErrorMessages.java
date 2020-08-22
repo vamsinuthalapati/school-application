@@ -33,13 +33,13 @@ public class ErrorMessages {
 	public final static String CONFIRM_EMAIL_PASSWORD = "Please provide e-mail and confirm new password";
 	public final static String PWDS_NOT_MATCHED = "Your passwords do not match.";
 
-	public final String BOTH_PASSWORD_REQUIRED = "Please enter your old password and new password";
-	public final String PROVIDE_OLD_PASSWORD = "Please provide your old password";
-	public final String PROVIDE_NEW_PASSWORD = "Please provide new password";
+	public final static String BOTH_PASSWORD_REQUIRED = "Please enter your old password and new password";
+	public final static String PROVIDE_OLD_PASSWORD = "Please provide your old password";
+	public final static String PROVIDE_NEW_PASSWORD = "Please provide new password";
 	public final static String CONFIRM_NEW_PASSWORD = "Please confirm your new password";
-	public final String PASSWORD_NOT_MATCHED = "Both passwords do not match";
-	public final String USER_NOT_REGISTERED = "User not registered yet!";
-	public final String CORRECT_PASSWORD = "Please enter correct password";
+	public final static String PASSWORD_NOT_MATCHED = "Both passwords do not match";
+	public final static String USER_NOT_REGISTERED = "User not registered yet!";
+	public final static String CORRECT_PASSWORD = "Please enter correct password";
 	public final static String UPDATE_PASSWORD_FAILED = "Your password update has failed. Please try again";
 
 	public final String PROVIDE_COMPANY_NAME = "Please provide your Company name";
@@ -51,7 +51,7 @@ public class ErrorMessages {
 
 	public final String PROVIDE_PICTURE = "Please provide a picture";
 
-	public final String PROVIDE_AUTH_TOKEN = "Please provide valid authorization token";
+	public final static String PROVIDE_AUTH_TOKEN = "Please provide valid authorization token";
 	public final String PROVIDE_VALID_AUTHCODE = "Please provide valid authorization code";
 	public final String PROVIDE_ACCESS_TOKEN = "Please provide access token";
 	public final String CONNECTION_TYPE_REQUIRED = "Please provide connection type";

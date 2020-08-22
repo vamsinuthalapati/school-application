@@ -14,12 +14,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.application.constants.ErrorMessages;
 import com.application.constants.MessageConstants;
 import com.application.constants.SuccessMessages;
+import com.application.domain.ChangePassword;
 import com.application.domain.LoginRequest;
 import com.application.domain.ResponseObject;
 import com.application.domain.UpdatePassword;
@@ -184,4 +186,51 @@ public class UsersDetailsService implements IUserDetailsService {
 		}
 
 	}
+
+	@Override
+	public ResponseObject changePwd(ChangePassword changePassword, String authToken) {
+
+		if (CommonUtils.isNull(authToken)) {
+			return new ResponseObject(null, ErrorMessages.PROVIDE_AUTH_TOKEN, HttpStatus.BAD_REQUEST);
+		}
+		if (changePassword == null) {
+			return new ResponseObject(null, ErrorMessages.BOTH_PASSWORD_REQUIRED, HttpStatus.BAD_REQUEST);
+		}
+		if (CommonUtils.isNull(changePassword.getOldPassword())) {
+			return new ResponseObject(null, ErrorMessages.PROVIDE_OLD_PASSWORD, HttpStatus.BAD_REQUEST);
+		}
+		if ((CommonUtils.isNull(changePassword.getNewPassword()) || (changePassword.getNewPassword().length() == 0))) {
+			return new ResponseObject(null, ErrorMessages.PROVIDE_NEW_PASSWORD, HttpStatus.BAD_REQUEST);
+		}
+		if (CommonUtils.isNull(changePassword.getConfirmNewPassword())) {
+			return new ResponseObject(null, ErrorMessages.CONFIRM_NEW_PASSWORD, HttpStatus.BAD_REQUEST);
+		}
+		if (!changePassword.getNewPassword().equals(changePassword.getConfirmNewPassword())) {
+			return new ResponseObject(null, ErrorMessages.PASSWORD_NOT_MATCHED, HttpStatus.BAD_REQUEST);
+		}
+
+		try {
+			String authToken2 = authToken.substring(7);
+			String externalId = getUserExternalId(authToken2);
+			Users user = userDetailsRepository.getUserByExternalId(externalId);
+			if (user == null) {
+				return new ResponseObject(null, ErrorMessages.USER_NOT_REGISTERED, HttpStatus.BAD_REQUEST);
+			}
+
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			if (!encoder.matches(changePassword.getOldPassword(), user.getPassword())) {
+				return new ResponseObject(null, ErrorMessages.CORRECT_PASSWORD, HttpStatus.BAD_REQUEST);
+			}
+			int changedPwd = userDetailsRepository.changePwd(passwordEncoder.encode(changePassword.getNewPassword()),
+					user.getExternalId());
+			if (changedPwd == 1) {
+				return new ResponseObject(SuccessMessages.UPDATE_PASSWORD_SUCCESS, null, HttpStatus.OK);
+			}
+			return new ResponseObject(null, ErrorMessages.SOMETHING_WENT_WRONG, HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			LOGGER.info(e.getMessage() + " at " + Calendar.getInstance().getTime());
+			return new ResponseObject(null, ErrorMessages.SOMETHING_WENT_WRONG, HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }

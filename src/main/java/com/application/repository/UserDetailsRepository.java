@@ -21,4 +21,9 @@ public interface UserDetailsRepository extends JpaRepository<Users, Long> {
 	@Modifying
 	@Query(value = "update Users u set u.password = :password where u.externalId = :externalId", nativeQuery = false)
 	public int updatePassword(String externalId, String password);
+
+	@Transactional
+	@Modifying
+	@Query(value = "update Users u set u.password = :newPassword where u.externalId = :externalId", nativeQuery = false)
+	public int changePwd(String newPassword, String externalId);
 }

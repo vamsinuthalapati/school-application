@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.application.domain.ChangePassword;
 import com.application.domain.LoginRequest;
 import com.application.domain.ResponseObject;
 import com.application.domain.UpdatePassword;
@@ -30,10 +32,16 @@ public class UserController {
 		return userDetailsService.userLogin(loginRequest);
 	}
 
-	@PutMapping("/updatePwd")
+	@PutMapping("/resetPwd")
 	public ResponseObject updatePassword(@RequestBody UpdatePassword updatePassword) {
 
 		LOGGER.info("UserController : UpdatePassword initiated successfully");
 		return userDetailsService.update(updatePassword);
+	}
+
+	@PutMapping("/updatePwd")
+	public ResponseObject changePassword(@RequestBody ChangePassword changePassword,
+			@RequestHeader("Authorization") String authToken) {
+		return userDetailsService.changePwd(changePassword, authToken);
 	}
 }
