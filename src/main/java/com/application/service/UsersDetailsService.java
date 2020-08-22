@@ -4,6 +4,8 @@ package com.application.service;
 import java.text.ParseException;
 import java.util.Calendar;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,10 @@ import org.springframework.stereotype.Service;
 
 import com.application.constants.ErrorMessages;
 import com.application.constants.MessageConstants;
+import com.application.constants.SuccessMessages;
 import com.application.domain.LoginRequest;
 import com.application.domain.ResponseObject;
+import com.application.domain.UpdatePassword;
 import com.application.domain.Users;
 import com.application.jwt.AuthUser;
 import com.application.jwt.JwtAuthenticationResponse;
@@ -101,6 +105,14 @@ public class UsersDetailsService implements IUserDetailsService {
 
 	}
 
+	public static String resolveToken(HttpServletRequest req) {
+		String bearerToken = req.getHeader("Authorization");
+		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7, bearerToken.length());
+		}
+		return null;
+	}
+
 	public static String getUserExternalId(String authToken) {
 
 		// String token = resolveToken(authToken);
@@ -129,5 +141,47 @@ public class UsersDetailsService implements IUserDetailsService {
 		}
 
 		return MessageConstants.UNAUTHORIZED;
+	}
+
+	@Override
+	public ResponseObject update(UpdatePassword updatePassword) {
+
+		if (updatePassword == null) {
+			return new ResponseObject(null, ErrorMessages.EMAIL_PASSWORD_REQUIRED, HttpStatus.BAD_REQUEST);
+		}
+		if ((CommonUtils.isNull(updatePassword.getNewPassword()) || (updatePassword.getNewPassword().length() == 0))
+				&& CommonUtils.isNull(updatePassword.getExternalId())) {
+			return new ResponseObject(null, ErrorMessages.PROVIDE_EMAIL_PASSWORD, HttpStatus.BAD_REQUEST);
+		}
+		if ((CommonUtils.isNull(updatePassword.getConfirmNewPassword())
+				|| (updatePassword.getConfirmNewPassword().length() == 0))
+				&& CommonUtils.isNull(updatePassword.getExternalId())) {
+			return new ResponseObject(null, ErrorMessages.CONFIRM_EMAIL_PASSWORD, HttpStatus.BAD_REQUEST);
+		}
+		if ((CommonUtils.isNull(updatePassword.getNewPassword()) || (updatePassword.getNewPassword().length() == 0))
+				&& CommonUtils.isNull(updatePassword.getConfirmNewPassword())) {
+			return new ResponseObject(null, ErrorMessages.ENTER_NEW_PASSWORD, HttpStatus.BAD_REQUEST);
+		}
+		if ((CommonUtils.isNull(updatePassword.getExternalId())) || (updatePassword.getExternalId().length() == 0)) {
+			return new ResponseObject(null, ErrorMessages.EMAIL_REQUIRED, HttpStatus.BAD_REQUEST);
+		}
+		if ((CommonUtils.isNull(updatePassword.getNewPassword())) || (updatePassword.getNewPassword().length() == 0)) {
+			return new ResponseObject(null, ErrorMessages.ENTER_NEW_PASSWORD, HttpStatus.BAD_REQUEST);
+		}
+		if ((CommonUtils.isNull(updatePassword.getConfirmNewPassword()))
+				|| (updatePassword.getConfirmNewPassword().length() == 0)) {
+			return new ResponseObject(null, ErrorMessages.CONFIRM_NEW_PASSWORD, HttpStatus.BAD_REQUEST);
+		}
+		if (!updatePassword.getNewPassword().equals(updatePassword.getConfirmNewPassword())) {
+			return new ResponseObject(null, ErrorMessages.PWDS_NOT_MATCHED, HttpStatus.BAD_REQUEST);
+		}
+		int value = userDetailsRepository.updatePassword(updatePassword.getExternalId(),
+				passwordEncoder.encode(updatePassword.getNewPassword()));
+		if (value == 1) {
+			return new ResponseObject(SuccessMessages.UPDATE_PASSWORD_SUCCESS, null, HttpStatus.OK);
+		} else {
+			return new ResponseObject(null, ErrorMessages.UPDATE_PASSWORD_FAILED, HttpStatus.BAD_REQUEST);
+		}
+
 	}
 }

@@ -6,7 +6,7 @@ public class ErrorMessages {
 	public final String FIRST_NAME_REQUIRED = "Please provide your first name";
 	public final String LAST_NAME_REQUIRED = "Please provide your last name";
 	public final String COMPANY_NAME_REQUIRED = "Please provide your company name";
-	public final String EMAIL_REQUIRED = "Please provide your valid e-mail address";
+	public final static String EMAIL_REQUIRED = "Please provide your valid e-mail address";
 	public final String PASSWORD_REQUIRED = "Please provide your password";
 	public final String CHECK_EMAIL_FORMAT = "Please enter a valid e-mail address format";
 	public final String EMAIL_COMPANY_EXISTS = "E-mail ID and company name already exists";
@@ -26,21 +26,21 @@ public class ErrorMessages {
 	public final String INVALID_EMAIL_ADDRESS = "The e-mail address entered is invalid";
 	public final String EMAIL_REQ_FAILED = "Email request failed";
 
-	public final String EMAIL_PASSWORD_REQUIRED = "Please enter your e-mail and password";
-	public final String ENTER_NEW_PASSWORD = "Please enter your new password";
+	public final static String EMAIL_PASSWORD_REQUIRED = "Please enter your e-mail and password";
+	public final static String ENTER_NEW_PASSWORD = "Please enter your new password";
 	public final String ENTER_OLD_PASSWORD = "Please enter your old password";
-	public final String PROVIDE_EMAIL_PASSWORD = "Please provide e-mail and new password";
-	public final String CONFIRM_EMAIL_PASSWORD = "Please provide e-mail and confirm new password";
-	public final String PWDS_NOT_MATCHED = "Your passwords do not match.";
+	public final static String PROVIDE_EMAIL_PASSWORD = "Please provide e-mail and new password";
+	public final static String CONFIRM_EMAIL_PASSWORD = "Please provide e-mail and confirm new password";
+	public final static String PWDS_NOT_MATCHED = "Your passwords do not match.";
 
 	public final String BOTH_PASSWORD_REQUIRED = "Please enter your old password and new password";
 	public final String PROVIDE_OLD_PASSWORD = "Please provide your old password";
 	public final String PROVIDE_NEW_PASSWORD = "Please provide new password";
-	public final String CONFIRM_NEW_PASSWORD = "Please confirm your new password";
+	public final static String CONFIRM_NEW_PASSWORD = "Please confirm your new password";
 	public final String PASSWORD_NOT_MATCHED = "Both passwords do not match";
 	public final String USER_NOT_REGISTERED = "User not registered yet!";
 	public final String CORRECT_PASSWORD = "Please enter correct password";
-	public final String UPDATE_PASSWORD_FAILED = "Your password update has failed. Please try again";
+	public final static String UPDATE_PASSWORD_FAILED = "Your password update has failed. Please try again";
 
 	public final String PROVIDE_COMPANY_NAME = "Please provide your Company name";
 	public final String CHECK_EMAILID_FORMAT = "Please check the E-mail format";
