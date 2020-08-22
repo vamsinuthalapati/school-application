@@ -1,7 +1,24 @@
+=============WORK FLOW AUTOMATION IN COLLEGE================
+
+
+----------------------------
+NEED TO DEVELOP :
+----------------------------
+
 -contactUs api
--email service
+-email service api
 -one month trial version support
 -register students by uploading .csv
--rasor pay service
+-rasor pay service api
 -zoom, google meet api
 -g suite application apis
+-regular attendance api
+-google meet, zoom meeting attendance api
+-marks upload .csv api
+-class wise db design
+-add roles (admin, teacher, student)
+-pdf, ppt, docs, sheets upload class wise api
+-private git repository
+-aws deployment - ci/cd setup for demo branch
+-aws rds
+-domain purchase (Go daddy)
