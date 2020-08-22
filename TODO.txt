@@ -9,7 +9,7 @@ NEED TO DEVELOP :
 -email service api
 -one month trial version support
 -register students by uploading .csv
--rasor pay service api
+-rasor pay/stripe payment gateway service api
 -zoom, google meet api
 -g suite application apis
 -regular attendance api
