@@ -3,14 +3,14 @@ package com.application.constants;
 public class ErrorMessages {
 
 	public final static String DETAILS_REQUIRED = "Please provide your details";
-	public final String FIRST_NAME_REQUIRED = "Please provide your first name";
+	public final static String FIRST_NAME_REQUIRED = "Please provide your first name";
 	public final String LAST_NAME_REQUIRED = "Please provide your last name";
 	public final String COMPANY_NAME_REQUIRED = "Please provide your company name";
 	public final static String EMAIL_REQUIRED = "Please provide your valid e-mail address";
 	public final String PASSWORD_REQUIRED = "Please provide your password";
 	public final String CHECK_EMAIL_FORMAT = "Please enter a valid e-mail address format";
 	public final String EMAIL_COMPANY_EXISTS = "E-mail ID and company name already exists";
-	public final String EMAIL_ALREADY_EXISTS = "E-mail ID is already registered";
+	public final static String EMAIL_ALREADY_EXISTS = "E-mail ID is already registered";
 	public final String COMPANY_ALREADY_EXSITS = "Company name already exists";
 	public final String VALID_COUPON_CODE = "Please provide a valid coupon code";
 	public final static String SOMETHING_WENT_WRONG = "Sorry! Something went wrong. Please try again";

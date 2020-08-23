@@ -241,10 +241,20 @@ public class UsersDetailsService implements IUserDetailsService {
 	public ResponseObject registerHead(HeadRequestBody headRequestBody) {
 
 		try {
+			if (CommonUtils.isNull(headRequestBody.getEmail())) {
+				return new ResponseObject(null, ErrorMessages.EMAIL_REQUIRED, HttpStatus.BAD_REQUEST);
+			}
+			if (CommonUtils.isNull(headRequestBody.getPassword())) {
+				return new ResponseObject(null, ErrorMessages.ENTER_PASSWORD, HttpStatus.BAD_REQUEST);
+			}
+			if (CommonUtils.isNull(headRequestBody.getFirstName())) {
+				return new ResponseObject(null, ErrorMessages.FIRST_NAME_REQUIRED, HttpStatus.BAD_REQUEST);
+			}
+
 			List<Users> users = userDetailsRepository.getAllUsers();
 			for (Users allUsers : users) {
 				if (allUsers.getEmail().equalsIgnoreCase(headRequestBody.getEmail())) {
-					return new ResponseObject(null, "Email already exists", HttpStatus.BAD_REQUEST);
+					return new ResponseObject(null, ErrorMessages.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
 				}
 			}
 
@@ -253,8 +263,8 @@ public class UsersDetailsService implements IUserDetailsService {
 					passwordEncoder.encode(headRequestBody.getPassword()), RolesEnum.ADMIN.toString(),
 					Calendar.getInstance(), Calendar.getInstance(), false);
 			userDetailsRepository.saveAndFlush(user);
-			
-			return new ResponseObject("User created successfully", user.getEmail(), HttpStatus.OK);
+
+			return new ResponseObject(SuccessMessages.ACCOUNT_CREATED_SUCCESS, user.getEmail(), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
