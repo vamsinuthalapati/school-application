@@ -7,6 +7,7 @@ public class JwtAuthenticationResponse {
 	private String email;
 	private String firstName;
 	private String lastName;
+	private String type;
 	private String externalId;
 
 	public String getAccessToken() {
@@ -49,6 +50,14 @@ public class JwtAuthenticationResponse {
 		this.lastName = lastName;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String getExternalId() {
 		return externalId;
 	}
@@ -58,20 +67,22 @@ public class JwtAuthenticationResponse {
 	}
 
 	public JwtAuthenticationResponse(String accessToken, String tokenType, String email, String firstName,
-			String lastName, String externalId) {
+			String lastName, String type, String externalId) {
 		super();
 		this.accessToken = accessToken;
 		this.tokenType = tokenType;
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.type = type;
 		this.externalId = externalId;
 	}
 
 	@Override
 	public String toString() {
 		return "JwtAuthenticationResponse [accessToken=" + accessToken + ", tokenType=" + tokenType + ", email=" + email
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", externalId=" + externalId + "]";
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", type=" + type + ", externalId="
+				+ externalId + "]";
 	}
 
 }

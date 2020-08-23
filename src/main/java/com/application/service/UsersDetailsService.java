@@ -99,9 +99,10 @@ public class UsersDetailsService implements IUserDetailsService {
 
 			String jwt = tokenProvider.generateToken(authentication, userDetails);
 
-			return new ResponseObject(new JwtAuthenticationResponse(jwt, "Bearer", userDetails.getEmail(),
-					userDetails.getFirstName(), userDetails.getLastName(), userDetails.getExternalId()), null,
-					HttpStatus.OK);
+			return new ResponseObject(
+					new JwtAuthenticationResponse(jwt, "Bearer", userDetails.getEmail(), userDetails.getFirstName(),
+							userDetails.getLastName(), userDetails.getType(), userDetails.getExternalId()),
+					null, HttpStatus.OK);
 
 		} catch (Exception e) {
 			LOGGER.info(e.getMessage() + " at " + Calendar.getInstance().getTime());
@@ -262,9 +263,19 @@ public class UsersDetailsService implements IUserDetailsService {
 					headRequestBody.getLastName(), headRequestBody.getEmail(),
 					passwordEncoder.encode(headRequestBody.getPassword()), RolesEnum.ADMIN.toString(),
 					Calendar.getInstance(), Calendar.getInstance(), false);
-			userDetailsRepository.saveAndFlush(user);
+			Users savedUser = userDetailsRepository.saveAndFlush(user);
 
-			return new ResponseObject(SuccessMessages.ACCOUNT_CREATED_SUCCESS, user.getEmail(), HttpStatus.OK);
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(savedUser.getExternalId(), headRequestBody.getPassword()));
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			String jwt = tokenProvider.generateToken(authentication, savedUser);
+
+			return new ResponseObject(
+					new JwtAuthenticationResponse(jwt, "Bearer", savedUser.getEmail(), savedUser.getFirstName(),
+							savedUser.getLastName(), savedUser.getType(), savedUser.getExternalId()),
+					SuccessMessages.ACCOUNT_CREATED_SUCCESS, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
