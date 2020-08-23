@@ -13,7 +13,7 @@ import com.application.domain.Users;
 @Repository
 public interface UserDetailsRepository extends JpaRepository<Users, Long> {
 
-	@Query(value = "select u from Users u where u.email = :email")
+	@Query(value = "select u from Users u where u.email = :email", nativeQuery = false)
 	public Users userLoginEmail(String email);
 
 	@Query(value = "select u from Users u where u.externalId = :externalId", nativeQuery = false)

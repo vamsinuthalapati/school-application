@@ -64,18 +64,18 @@ public class UsersDetailsService implements IUserDetailsService {
 	public ResponseObject userLogin(LoginRequest login) {
 		Users userDetails = new Users();
 
-		if (CommonUtils.isNull(login.getEmailId()) && CommonUtils.isNull(login.getPassword())) {
+		if (CommonUtils.isNull(login.getEmail()) && CommonUtils.isNull(login.getPassword())) {
 			return new ResponseObject(null, ErrorMessages.LOGIN_DETAILS, HttpStatus.BAD_REQUEST);
 		}
 		LOGGER.info("UserServiceImpl :  userLogin initiated successfully");
-		if ((CommonUtils.isNull(login.getEmailId()))) {
+		if ((CommonUtils.isNull(login.getEmail()))) {
 			return new ResponseObject(null, ErrorMessages.REGISTERED_EMAIL, HttpStatus.BAD_REQUEST);
 		}
 		if (CommonUtils.isNull(login.getPassword())) {
 			return new ResponseObject(null, ErrorMessages.ENTER_PASSWORD, HttpStatus.BAD_REQUEST);
 		}
-		if (login.getEmailId().contains("@")) {
-			userDetails = userDetailsRepository.userLoginEmail(login.getEmailId().toLowerCase());
+		if (login.getEmail().contains("@")) {
+			userDetails = userDetailsRepository.userLoginEmail(login.getEmail().toLowerCase());
 		}
 		if (userDetails == null) {
 			return new ResponseObject(null, ErrorMessages.NOT_REGISTERED, HttpStatus.BAD_REQUEST);

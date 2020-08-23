@@ -2,15 +2,15 @@ package com.application.domain;
 
 public class LoginRequest {
 
-	private String emailId;
+	private String email;
 	private String password;
 
-	public String getEmailId() {
-		return emailId;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -21,8 +21,19 @@ public class LoginRequest {
 		this.password = password;
 	}
 
+	public LoginRequest(String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
+	}
+
+	public LoginRequest() {
+		super();
+	}
+
 	@Override
 	public String toString() {
-		return "Login [emailId=" + emailId + ", password=" + password + "]";
+		return "LoginRequest [email=" + email + ", password=" + password + "]";
 	}
+
 }
