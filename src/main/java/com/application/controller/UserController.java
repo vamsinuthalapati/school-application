@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.application.domain.ChangePassword;
+import com.application.domain.HeadRequestBody;
 import com.application.domain.LoginRequest;
 import com.application.domain.ResponseObject;
 import com.application.domain.UpdatePassword;
@@ -43,5 +44,10 @@ public class UserController {
 	public ResponseObject changePassword(@RequestBody ChangePassword changePassword,
 			@RequestHeader("Authorization") String authToken) {
 		return userDetailsService.changePwd(changePassword, authToken);
+	}
+
+	@PostMapping("/registerHead")
+	public ResponseObject registerHead(@RequestBody HeadRequestBody headRequestBody) {
+		return userDetailsService.registerHead(headRequestBody);
 	}
 }

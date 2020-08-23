@@ -22,6 +22,7 @@ import com.application.constants.ErrorMessages;
 import com.application.constants.MessageConstants;
 import com.application.constants.SuccessMessages;
 import com.application.domain.ChangePassword;
+import com.application.domain.HeadRequestBody;
 import com.application.domain.LoginRequest;
 import com.application.domain.ResponseObject;
 import com.application.domain.UpdatePassword;
@@ -29,6 +30,7 @@ import com.application.domain.Users;
 import com.application.jwt.AuthUser;
 import com.application.jwt.JwtAuthenticationResponse;
 import com.application.repository.UserDetailsRepository;
+import com.application.roles.RolesEnum;
 import com.application.security.JwtTokenProvider;
 import com.application.utils.CommonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -232,5 +234,13 @@ public class UsersDetailsService implements IUserDetailsService {
 			return new ResponseObject(null, ErrorMessages.SOMETHING_WENT_WRONG, HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	@Override
+	public ResponseObject registerHead(HeadRequestBody headRequestBody) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 
 }
