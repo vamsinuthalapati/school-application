@@ -1,8 +1,13 @@
 
 package com.application.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.application.constants.ErrorMessages;
 import com.application.constants.MessageConstants;
@@ -26,6 +32,7 @@ import com.application.constants.SuccessMessages;
 import com.application.domain.ChangePassword;
 import com.application.domain.HeadRequestBody;
 import com.application.domain.LoginRequest;
+import com.application.domain.RegisterUserWithExcel;
 import com.application.domain.ResponseObject;
 import com.application.domain.UpdatePassword;
 import com.application.domain.Users;
@@ -38,6 +45,16 @@ import com.application.utils.CommonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jwt.SignedJWT;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class UsersDetailsService implements IUserDetailsService {
@@ -279,6 +296,84 @@ public class UsersDetailsService implements IUserDetailsService {
 		} catch (Exception e) {
 			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@Override
+	public ResponseObject registerUserExcel() {
+
+		// Step 1: Read Excel File into Java List Objects
+		List<RegisterUserWithExcel> registerUserWithExcel = readExcelFile("customers.xlsx");
+
+		// Step 2: Write Java List Objects to JSON File
+		String jsonString = convertObjects2JsonString(registerUserWithExcel);
+		JSONObject jsonObj = new JSONObject(jsonString.toString());
+
+		System.out.println("Done");
+		LOGGER.info(jsonObj + "");
+		return null;
+	}
+
+	private static List<RegisterUserWithExcel> readExcelFile(String filePath) {
+		try {
+			FileInputStream excelFile = new FileInputStream(new File(filePath));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+
+			Sheet sheet = workbook.getSheet("Sheet1");
+			Iterator<Row> rows = sheet.iterator();
+
+			List<RegisterUserWithExcel> lstCustomers = new ArrayList<RegisterUserWithExcel>();
+
+			int rowNumber = 0;
+			while (rows.hasNext()) {
+				Row currentRow = rows.next();
+
+				// skip header
+				if (rowNumber == 0) {
+					rowNumber++;
+					continue;
+				}
+
+				Iterator<Cell> cellsInRow = currentRow.iterator();
+
+				RegisterUserWithExcel registerUserWithExcel = new RegisterUserWithExcel();
+
+				int cellIndex = 0;
+				while (cellsInRow.hasNext()) {
+					Cell currentCell = cellsInRow.next();
+
+					if (cellIndex == 0) { // ID
+						registerUserWithExcel.setEmail(String.valueOf(currentCell.getStringCellValue()));
+					} else if (cellIndex == 1) { // Name
+						registerUserWithExcel.setFirstName(currentCell.getStringCellValue());
+					} else if (cellIndex == 2) { // Address
+						registerUserWithExcel.setLastName(currentCell.getStringCellValue());
+					}
+
+					cellIndex++;
+				}
+
+				lstCustomers.add(registerUserWithExcel);
+			}
+
+			// Close WorkBook
+			workbook.close();
+
+			return lstCustomers;
+		} catch (IOException e) {
+			throw new RuntimeException("FAIL! -> message = " + e.getMessage());
+		}
+	}
+
+	private static String convertObjects2JsonString(List<RegisterUserWithExcel> customers) {
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = "";
+		try {
+			jsonString = mapper.writeValueAsString(customers).toString();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		return jsonString;
 	}
 
 }
