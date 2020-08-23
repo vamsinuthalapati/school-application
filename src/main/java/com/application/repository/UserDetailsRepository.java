@@ -1,5 +1,7 @@
 package com.application.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +28,7 @@ public interface UserDetailsRepository extends JpaRepository<Users, Long> {
 	@Modifying
 	@Query(value = "update Users u set u.password = :newPassword where u.externalId = :externalId", nativeQuery = false)
 	public int changePwd(String newPassword, String externalId);
+
+	@Query(value = "select u from Users u")
+	public List<Users> getAllUsers();
 }

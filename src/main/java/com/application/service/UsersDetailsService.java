@@ -3,6 +3,8 @@ package com.application.service;
 
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -237,10 +239,25 @@ public class UsersDetailsService implements IUserDetailsService {
 
 	@Override
 	public ResponseObject registerHead(HeadRequestBody headRequestBody) {
-		// TODO Auto-generated method stub
-		return null;
+
+		try {
+			List<Users> users = userDetailsRepository.getAllUsers();
+			for (Users allUsers : users) {
+				if (allUsers.getEmail().equalsIgnoreCase(headRequestBody.getEmail())) {
+					return new ResponseObject(null, "Email already exists", HttpStatus.BAD_REQUEST);
+				}
+			}
+
+			Users user = new Users(UUID.randomUUID().toString(), headRequestBody.getFirstName(),
+					headRequestBody.getLastName(), headRequestBody.getEmail(),
+					passwordEncoder.encode(headRequestBody.getPassword()), RolesEnum.ADMIN.toString(),
+					Calendar.getInstance(), Calendar.getInstance(), false);
+			userDetailsRepository.saveAndFlush(user);
+			
+			return new ResponseObject("User created successfully", user.getEmail(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
-	
-	
 
 }
