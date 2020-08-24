@@ -43,6 +43,7 @@ import com.application.roles.RolesEnum;
 import com.application.security.JwtTokenProvider;
 import com.application.utils.CommonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jwt.SignedJWT;
 
@@ -51,10 +52,19 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 @Service
 public class UsersDetailsService implements IUserDetailsService {
@@ -299,23 +309,29 @@ public class UsersDetailsService implements IUserDetailsService {
 	}
 
 	@Override
-	public ResponseObject registerUserExcel() {
+	public ResponseObject registerUserExcel(MultipartFile file) throws JsonMappingException, JsonProcessingException {
 
 		// Step 1: Read Excel File into Java List Objects
-		List<RegisterUserWithExcel> registerUserWithExcel = readExcelFile("customers.xlsx");
+		List<RegisterUserWithExcel> registerUserWithExcel = readExcelFile("customers", file);
 
 		// Step 2: Write Java List Objects to JSON File
-		String jsonString = convertObjects2JsonString(registerUserWithExcel);
-		JSONObject jsonObj = new JSONObject(jsonString.toString());
+		JSONArray jsonArray = new JSONArray(registerUserWithExcel);
+		List list = new ArrayList<>();
+		for (int i = 0; i < jsonArray.length(); i++) {
+			RegisterUserWithExcel registrationObject = registerUserWithExcel.get(i);
+			list.add(registrationObject);
+			LOGGER.info("jsonArrayObject" + registrationObject);
+		}
 
-		System.out.println("Done");
-		LOGGER.info(jsonObj + "");
-		return null;
+		LOGGER.info("" + list);
+		return new ResponseObject(list, null, HttpStatus.OK);
 	}
 
-	private static List<RegisterUserWithExcel> readExcelFile(String filePath) {
+	private static List<RegisterUserWithExcel> readExcelFile(String filePath, MultipartFile file) {
 		try {
-			FileInputStream excelFile = new FileInputStream(new File(filePath));
+			File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + filePath);
+			file.transferTo(convFile);
+			FileInputStream excelFile = new FileInputStream(convFile);
 			Workbook workbook = new XSSFWorkbook(excelFile);
 
 			Sheet sheet = workbook.getSheet("Sheet1");
@@ -362,18 +378,6 @@ public class UsersDetailsService implements IUserDetailsService {
 		} catch (IOException e) {
 			throw new RuntimeException("FAIL! -> message = " + e.getMessage());
 		}
-	}
-
-	private static String convertObjects2JsonString(List<RegisterUserWithExcel> customers) {
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = "";
-		try {
-			jsonString = mapper.writeValueAsString(customers).toString();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-
-		return jsonString;
 	}
 
 }

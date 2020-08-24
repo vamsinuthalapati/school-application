@@ -5,6 +5,7 @@ public class RegisterUserWithExcel {
 	private String email;
 	private String firstName;
 	private String lastName;
+	private String type;
 
 	public String getEmail() {
 		return email;

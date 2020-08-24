@@ -18,6 +18,8 @@ import com.application.domain.LoginRequest;
 import com.application.domain.ResponseObject;
 import com.application.domain.UpdatePassword;
 import com.application.service.IUserDetailsService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -54,7 +56,7 @@ public class UserController {
 	}
 
 	@PostMapping("/registerWithExcel")
-	public ResponseObject registerUserExcel() {
-		return userDetailsService.registerUserExcel();
+	public ResponseObject registerUserExcel(@RequestParam("file") MultipartFile file) throws JsonMappingException, JsonProcessingException {
+		return userDetailsService.registerUserExcel(file);
 	}
 }

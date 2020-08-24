@@ -7,6 +7,8 @@ import com.application.domain.HeadRequestBody;
 import com.application.domain.LoginRequest;
 import com.application.domain.ResponseObject;
 import com.application.domain.UpdatePassword;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public interface IUserDetailsService {
 
@@ -18,5 +20,5 @@ public interface IUserDetailsService {
 
 	public ResponseObject registerHead(HeadRequestBody headRequestBody);
 
-	public ResponseObject registerUserExcel();
+	public ResponseObject registerUserExcel(MultipartFile file) throws JsonMappingException, JsonProcessingException;
 }
