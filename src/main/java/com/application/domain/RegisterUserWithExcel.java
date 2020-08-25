@@ -31,11 +31,20 @@ public class RegisterUserWithExcel {
 		this.lastName = lastName;
 	}
 
-	public RegisterUserWithExcel(String email, String firstName, String lastName) {
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public RegisterUserWithExcel(String email, String firstName, String lastName, String type) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.type = type;
 	}
 
 	public RegisterUserWithExcel() {
@@ -43,8 +52,18 @@ public class RegisterUserWithExcel {
 	}
 
 	@Override
+	public boolean equals(Object anObject) {
+		if (!(anObject instanceof RegisterUserWithExcel)) {
+			return false;
+		}
+		RegisterUserWithExcel otherMember = (RegisterUserWithExcel) anObject;
+		return otherMember.getEmail().equals(getEmail());
+	}
+
+	@Override
 	public String toString() {
-		return "RegisterUserWithExcel [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		return "RegisterUserWithExcel [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", type=" + type + "]";
 	}
 
 }

@@ -74,6 +74,9 @@ public class UsersDetailsService implements IUserDetailsService {
 	@Autowired
 	private UserDetailsRepository userDetailsRepository;
 
+	@Autowired
+	private AsyncUserRegisterService asyncUserRegisterService;
+
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
 	private JwtTokenProvider tokenProvider;
@@ -319,10 +322,14 @@ public class UsersDetailsService implements IUserDetailsService {
 		List list = new ArrayList<>();
 		for (int i = 0; i < jsonArray.length(); i++) {
 			RegisterUserWithExcel registrationObject = registerUserWithExcel.get(i);
+//			list.add(jsonArray.get(i));
 			list.add(registrationObject);
 			LOGGER.info("jsonArrayObject" + registrationObject);
 		}
+		
+//		List newList = (List) jsonArray;
 
+		asyncUserRegisterService.registerUsersAsync(list);
 		LOGGER.info("" + list);
 		return new ResponseObject(list, null, HttpStatus.OK);
 	}
@@ -363,6 +370,8 @@ public class UsersDetailsService implements IUserDetailsService {
 						registerUserWithExcel.setFirstName(currentCell.getStringCellValue());
 					} else if (cellIndex == 2) { // Address
 						registerUserWithExcel.setLastName(currentCell.getStringCellValue());
+					} else if (cellIndex == 3) { // Address
+						registerUserWithExcel.setType(currentCell.getStringCellValue());
 					}
 
 					cellIndex++;
