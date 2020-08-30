@@ -319,15 +319,12 @@ public class UsersDetailsService implements IUserDetailsService {
 
 		// Step 2: Write Java List Objects to JSON File
 		JSONArray jsonArray = new JSONArray(registerUserWithExcel);
-		List list = new ArrayList<>();
+		List<RegisterUserWithExcel> list = new ArrayList<>();
 		for (int i = 0; i < jsonArray.length(); i++) {
 			RegisterUserWithExcel registrationObject = registerUserWithExcel.get(i);
-//			list.add(jsonArray.get(i));
 			list.add(registrationObject);
 			LOGGER.info("jsonArrayObject" + registrationObject);
 		}
-		
-//		List newList = (List) jsonArray;
 
 		asyncUserRegisterService.registerUsersAsync(list);
 		LOGGER.info("" + list);

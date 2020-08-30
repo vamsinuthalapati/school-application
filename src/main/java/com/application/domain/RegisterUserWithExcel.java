@@ -1,10 +1,16 @@
 package com.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RegisterUserWithExcel {
 
+	@JsonProperty(value = "email")
 	private String email;
+	@JsonProperty(value = "firstName")
 	private String firstName;
+	@JsonProperty(value = "lastName")
 	private String lastName;
+	@JsonProperty(value = "type")
 	private String type;
 
 	public String getEmail() {

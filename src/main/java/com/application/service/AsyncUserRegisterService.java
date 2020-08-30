@@ -11,11 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.application.domain.RegisterUserWithExcel;
 import com.application.domain.Users;
 import com.application.repository.UserDetailsRepository;
+import com.application.roles.RolesEnum;
+import com.application.security.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -26,56 +30,59 @@ public class AsyncUserRegisterService {
 	@Autowired
 	private UserDetailsRepository userDetailsRepository;
 
-//	@Async
-	public void registerUsersAsync(List list) {
+	private AuthenticationManager authenticationManager;
+	private PasswordEncoder passwordEncoder;
+	private JwtTokenProvider tokenProvider;
 
-		LOGGER.info("Async :" + list);
-		if (list.isEmpty()) {
-			// send email to User
-		}
-		try {
+	@Autowired
+	public AsyncUserRegisterService(AuthenticationManager authenticationManager, UserDetailsRepository userRepository,
+			PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
+		this.authenticationManager = authenticationManager;
+		this.userDetailsRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.tokenProvider = tokenProvider;
+	}
 
-			List excelList = list;
-			List<Users> dbList = userDetailsRepository.getAllUsers();
-			List finalList = new ArrayList<RegisterUserWithExcel>();
+	public static final String PASSWORD = "Test@123";
 
-			LOGGER.info("excel list : " + excelList);
-			for (int i = 0; i < excelList.size(); i++) {
-				JSONObject excelListObject = new JSONObject(excelList.get(i));
-//				String excelListData = excelList.get(i).toString();
-//				RegisterUserWithExcel registerObject = (RegisterUserWithExcel) excelList.get(i);
-//				ObjectMapper mapper = new ObjectMapper();
-//				RegisterUserWithExcel registerObject = mapper.readValue(excelListData.toString(), RegisterUserWithExcel.class);
-				LOGGER.info("Register object : " + excelListObject);
-				for (int j = 0; j < dbList.size(); j++) {
+	@Async
+	public void registerUsersAsync(List<RegisterUserWithExcel> list) {
 
-					Users dbListObject = dbList.get(j);
-					if (excelListObject.getString("email").equalsIgnoreCase(dbListObject.getEmail())) {
-						finalList.add(excelListObject);
-						LOGGER.info("object to be added :" + excelListObject);
-						LOGGER.info("added :" + dbListObject.getEmail());
-					}
+		List<RegisterUserWithExcel> excelList = list;
+
+		List<RegisterUserWithExcel> dbList = userDetailsRepository.getAllUsersExcelClass();
+
+		List<RegisterUserWithExcel> removeList = new ArrayList<>();
+
+		LOGGER.info("excel List :" + excelList);
+
+		LOGGER.info("db List :" + dbList);
+
+		for (int i = 0; i < excelList.size(); i++) {
+
+			for (int j = 0; j < dbList.size(); j++) {
+
+				if (excelList.get(i).getEmail().equals(dbList.get(j).getEmail())) {
+
+					removeList.add(dbList.get(j));
 				}
 			}
+		}
 
-//			ObjectMapper mapper = new ObjectMapper();
-//			RegisterUserWithExcel registerObject = mapper.readValue(finalList.toString(), RegisterUserWithExcel.class);
-			List newList = new ArrayList<RegisterUserWithExcel>();
-			for (int i = 0; i < excelList.size(); i++) {
-				JSONObject excelListObject = new JSONObject(excelList.get(i));
-				newList.add(excelListObject);
-			}
-			LOGGER.info("final List to register :" + finalList);
-			LOGGER.info("This is it : " + finalList.size());
+		LOGGER.info("remove List :" + removeList);
+		if (removeList.size() != 0) {
+			LOGGER.info("removing already registered account List :" + excelList.removeAll(removeList));
+		}
+		LOGGER.info("final List :" + excelList);
 
-			System.out.println(finalList);
-			
-			System.out.println(newList);
-			LOGGER.info(""+newList.get(1));
-			LOGGER.info(""+newList.remove(finalList.get(0)));
-			LOGGER.info("difference list :" + newList);
-		} catch (Exception e) {
-			LOGGER.info("Error occured :" + e.getMessage());
+		for (int k = 0; k < excelList.size(); k++) {
+
+			Users user = new Users(UUID.randomUUID().toString(), excelList.get(k).getFirstName(),
+					excelList.get(k).getLastName(), excelList.get(k).getEmail(), passwordEncoder.encode(PASSWORD),
+					excelList.get(k).getType(), Calendar.getInstance(), Calendar.getInstance(), false);
+			Users savedUser = userDetailsRepository.saveAndFlush(user);
+
+			LOGGER.info("registered user :" + excelList.get(k).getEmail());
 		}
 	}
 }

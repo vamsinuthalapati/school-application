@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.application.domain.RegisterUserWithExcel;
 import com.application.domain.Users;
 
 @Repository
@@ -31,4 +32,7 @@ public interface UserDetailsRepository extends JpaRepository<Users, Long> {
 
 	@Query(value = "select u from Users u")
 	public List<Users> getAllUsers();
+
+	@Query(value = "select new com.application.domain.RegisterUserWithExcel(u.email, u.firstName, u.lastName, u.type) from Users u", nativeQuery = false)
+	public List<RegisterUserWithExcel> getAllUsersExcelClass();
 }
