@@ -1,5 +1,6 @@
 package com.application.service;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.application.domain.ChangePassword;
@@ -10,6 +11,7 @@ import com.application.domain.UpdatePassword;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+@Service
 public interface IUserDetailsService {
 
 	public ResponseObject userLogin(LoginRequest loginRequest);
