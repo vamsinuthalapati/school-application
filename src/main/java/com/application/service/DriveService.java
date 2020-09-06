@@ -28,8 +28,10 @@ import org.springframework.stereotype.Service;
 
 import com.application.constants.GoogleApiConstants;
 import com.application.domain.ResponseObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 
 @Service
@@ -144,6 +146,35 @@ public class DriveService implements IDriveService {
 			return new ResponseObject(filesArray, null, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseObject(null, "Error", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Override
+	public ResponseObject shareFileWithPermissions(String code, String fileId) {
+
+		String accessToken = getAccessTokenRefreshToken(code);
+
+		try {
+
+			JSONObject object = new JSONObject();
+			object.put("role", "reader");
+			object.put("type", "user");
+			object.put("emailAddress", "nvjprasad@gmail.com");
+			ObjectMapper mapper = new ObjectMapper();
+
+			HttpResponse<String> response = Unirest
+					.post("https://www.googleapis.com/drive/v3/files/" + fileId + "/permissions")
+					.header("Authorization", "Bearer " + accessToken).header("Content-Type", "application/json")
+					.body(mapper.writeValueAsString(object)).asString();
+
+			String responseObject = response.getBody().toString();
+			LOGGER.info("Object :" + responseObject);
+			JSONParser parser = new JSONParser();
+			JSONObject obj = (JSONObject) parser.parse(responseObject);
+
+			return new ResponseObject(obj, null, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseObject(e.getMessage(), "Error", HttpStatus.BAD_REQUEST);
 		}
 	}
 

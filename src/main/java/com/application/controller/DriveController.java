@@ -2,6 +2,7 @@ package com.application.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,5 +22,10 @@ public class DriveController {
 	@GetMapping("/filesList")
 	public ResponseObject getFilesList(@RequestHeader("code") String code, @RequestHeader("fileType") String fileType) {
 		return iDriveService.getDriveFilesList(code, fileType);
+	}
+
+	@PostMapping("/shareFiles")
+	public ResponseObject shareFiles(@RequestHeader("code") String code, @RequestHeader String fileId) {
+		return iDriveService.shareFileWithPermissions(code, fileId);
 	}
 }

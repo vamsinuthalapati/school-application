@@ -11,4 +11,6 @@ public interface IDriveService {
 
 	public ResponseObject getDriveFilesList(String code, String fileType);
 
+	public ResponseObject shareFileWithPermissions(String code, String fileId);
+
 }
