@@ -27,6 +27,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.application.constants.GoogleApiConstants;
+import com.application.domain.FilesListFromDrive;
+import com.application.domain.ListOfFilesList;
 import com.application.domain.ResponseObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -143,7 +145,65 @@ public class DriveService implements IDriveService {
 			JSONObject obj = (JSONObject) parser.parse(responseObject);
 
 			JSONArray filesArray = (JSONArray) obj.get("files");
-			return new ResponseObject(filesArray, null, HttpStatus.OK);
+
+			ListOfFilesList listOfFilesList;
+
+			List<FilesListFromDrive> listOfFiles1 = new ArrayList<>();
+			List<FilesListFromDrive> listOfFiles2 = new ArrayList<>();
+			List<FilesListFromDrive> listOfFiles3 = new ArrayList<>();
+			List<FilesListFromDrive> listOfFiles4 = new ArrayList<>();
+			List<FilesListFromDrive> listOfFiles5 = new ArrayList<>();
+			List<FilesListFromDrive> listOfFiles6 = new ArrayList<>();
+			List<FilesListFromDrive> listOfFiles7 = new ArrayList<>();
+			List<FilesListFromDrive> listOfFiles8 = new ArrayList<>();
+			List<FilesListFromDrive> listOfFiles9 = new ArrayList<>();
+			List<FilesListFromDrive> listOfFiles10 = new ArrayList<>();
+			FilesListFromDrive fileList;
+			for (int i = 0; i < filesArray.size(); i++) {
+				JSONObject fileObject = (JSONObject) filesArray.get(i);
+				fileList = new FilesListFromDrive(fileObject.get("id").toString(), fileObject.get("name").toString(),
+						fileObject.get("mimeType").toString(), null);
+				if (listOfFiles1.size() < 10) {
+					listOfFiles1.add(fileList);
+				} else if (listOfFiles2.size() < 10 && listOfFiles1.size() == 10) {
+					listOfFiles2.add(fileList);
+				} else if (listOfFiles3.size() < 10 && listOfFiles1.size() == 10 && listOfFiles2.size() == 10) {
+					listOfFiles3.add(fileList);
+				} else if (listOfFiles4.size() < 10 && listOfFiles3.size() == 10 && listOfFiles2.size() == 10
+						&& listOfFiles1.size() == 10) {
+					listOfFiles4.add(fileList);
+				} else if (listOfFiles5.size() < 10 && listOfFiles4.size() == 10 && listOfFiles3.size() == 10
+						&& listOfFiles2.size() == 10 && listOfFiles1.size() == 10) {
+					listOfFiles5.add(fileList);
+				} else if (listOfFiles6.size() < 10 && listOfFiles5.size() == 10 && listOfFiles4.size() == 10
+						&& listOfFiles3.size() == 10 && listOfFiles2.size() == 10 && listOfFiles1.size() == 10) {
+					listOfFiles6.add(fileList);
+				} else if (listOfFiles7.size() < 10 && listOfFiles6.size() == 10 && listOfFiles5.size() == 10
+						&& listOfFiles4.size() == 10 && listOfFiles3.size() == 10 && listOfFiles2.size() == 10
+						&& listOfFiles1.size() == 10) {
+					listOfFiles7.add(fileList);
+				} else if (listOfFiles8.size() < 10 && listOfFiles7.size() == 10 && listOfFiles6.size() == 10
+						&& listOfFiles5.size() == 10 && listOfFiles4.size() == 10 && listOfFiles3.size() == 10
+						&& listOfFiles2.size() == 10 && listOfFiles1.size() == 10) {
+					listOfFiles8.add(fileList);
+				} else if (listOfFiles9.size() < 10 && listOfFiles8.size() == 10 && listOfFiles7.size() == 10
+						&& listOfFiles6.size() == 10 && listOfFiles5.size() == 10 && listOfFiles4.size() == 10
+						&& listOfFiles3.size() == 10 && listOfFiles2.size() == 10 && listOfFiles1.size() == 10) {
+					listOfFiles9.add(fileList);
+				} else if (listOfFiles10.size() < 10 && listOfFiles9.size() == 10 && listOfFiles8.size() == 10
+						&& listOfFiles7.size() == 10 && listOfFiles6.size() == 10 && listOfFiles5.size() == 10
+						&& listOfFiles4.size() == 10 && listOfFiles3.size() == 10 && listOfFiles2.size() == 10
+						&& listOfFiles1.size() == 10) {
+					listOfFiles10.add(fileList);
+				}
+			}
+
+			listOfFilesList = new ListOfFilesList(listOfFiles1, listOfFiles2, listOfFiles3, listOfFiles4, listOfFiles5,
+					listOfFiles6, listOfFiles7, listOfFiles8, listOfFiles9, listOfFiles10);
+
+			LOGGER.info("Files List :" + listOfFiles1 + " /n" + listOfFiles2 + " /n" + listOfFiles3);
+			LOGGER.info("List size :" + listOfFiles1.size() + " " + listOfFiles2.size() + " " + listOfFiles3.size());
+			return new ResponseObject(listOfFilesList, null, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseObject(null, "Error", HttpStatus.BAD_REQUEST);
 		}
