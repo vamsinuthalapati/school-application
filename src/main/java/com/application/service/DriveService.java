@@ -2,9 +2,12 @@ package com.application.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -26,15 +29,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.application.constants.ErrorMessages;
 import com.application.constants.GoogleApiConstants;
+import com.application.constants.MessageConstants;
 import com.application.domain.FilesListFromDrive;
 import com.application.domain.ListOfFilesList;
 import com.application.domain.ResponseObject;
+import com.application.domain.Users;
+import com.application.jwt.AuthUser;
+import com.application.repository.UserDetailsRepository;
+import com.application.roles.RolesEnum;
+import com.application.utils.CommonUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.nimbusds.jwt.SignedJWT;
 
 @Service
 public class DriveService implements IDriveService {
@@ -51,6 +63,47 @@ public class DriveService implements IDriveService {
 
 	@Value("${redirect_uri}")
 	private String redirectUri;
+
+	@Autowired
+	private UserDetailsRepository userDetailsRepository;
+
+	public static String resolveToken(HttpServletRequest req) {
+		String bearerToken = req.getHeader("Authorization");
+		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7, bearerToken.length());
+		}
+		return null;
+	}
+
+	public static String getUserExternalId(String authToken) {
+
+		// String token = resolveToken(authToken);
+		String token = authToken;
+		if (token == null) {
+			return MessageConstants.UNAUTHORIZED;
+		}
+		SignedJWT signedJWT;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			signedJWT = SignedJWT.parse(token);
+			String object = signedJWT.getPayload().toJSONObject().toJSONString();
+			AuthUser user = mapper.readValue(object, AuthUser.class);
+			if (System.currentTimeMillis() > user.getSub()) {
+				return MessageConstants.UNAUTHORIZED;
+			} else {
+				return user.getJti();
+			}
+		} catch (ParseException | JsonProcessingException jpe) {
+			LOGGER.info(jpe.getMessage() + " at " + Calendar.getInstance().getTime());
+			LOGGER.error(jpe.getMessage(), jpe);
+
+		} catch (Exception e) {
+			LOGGER.info(e.getMessage() + " at " + Calendar.getInstance().getTime());
+			LOGGER.error(e.getMessage(), e);
+		}
+
+		return MessageConstants.UNAUTHORIZED;
+	}
 
 	public String getAccessTokenRefreshToken(String code) {
 
@@ -113,13 +166,66 @@ public class DriveService implements IDriveService {
 
 	}
 
+	public String googleAnalyticsNewAccessToken(String refreshToken) {
+		try {
+
+			LOGGER.info("authorization code:" + refreshToken);
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+			HttpPost post = new HttpPost("https://oauth2.googleapis.com/token");
+			// Google uses form-encoded parameters.
+			List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+			formparams.add(new BasicNameValuePair("client_id", clientId));
+			formparams.add(new BasicNameValuePair("client_secret", clientSecret));
+			formparams.add(new BasicNameValuePair("grant_type", "refresh_token"));
+			formparams.add(new BasicNameValuePair("refresh_token", refreshToken));
+			post.setEntity(new UrlEncodedFormEntity(formparams));
+
+			CloseableHttpResponse response = httpclient.execute(post);
+			int status = response.getStatusLine().getStatusCode();
+			HttpEntity body = response.getEntity();
+			String responseData = EntityUtils.toString(body);
+			JSONParser parser = new JSONParser();
+			JSONObject obj = (JSONObject) parser.parse(responseData);
+			String newAccessToken = obj.get("access_token").toString();
+
+			if (status == 200) {
+				return newAccessToken;
+			} else {
+				System.out.println("Error response from access request: " + responseData);
+				return "Error response from access request: " + responseData;
+			}
+
+		} catch (Exception e) {
+			LOGGER.info(e.getMessage() + " at " + Calendar.getInstance().getTime());
+			e.printStackTrace();
+			return e.getMessage();
+		}
+
+	}
+
 	@Override
-	public ResponseObject getDriveFilesList(String code, String fileType) {
+	public ResponseObject getDriveFilesList(String code, String fileType, String authToken) {
 
 		String accessToken = getAccessTokenRefreshToken(code);
 
 		try {
 
+			String authToken2 = authToken.substring(7);
+			String externalId = getUserExternalId(authToken2);
+			if (CommonUtils.isNotNull(externalId)) {
+				if (externalId.equalsIgnoreCase(MessageConstants.UNAUTHORIZED)) {
+					return new ResponseObject(null, null, HttpStatus.UNAUTHORIZED);
+				}
+			}
+			Users user = userDetailsRepository.getUserByExternalId(externalId);
+			if (user == null) {
+				return new ResponseObject(null, ErrorMessages.USER_NOT_REGISTERED, HttpStatus.BAD_REQUEST);
+			} else {
+				if (user.getType().equalsIgnoreCase(RolesEnum.STUDENT.toString())) {
+					return new ResponseObject(null, "You are not authorized to access this resource",
+							HttpStatus.UNAUTHORIZED);
+				}
+			}
 			String filterByType = "";
 
 			if (fileType.equalsIgnoreCase("Sheets")) {
@@ -134,6 +240,8 @@ public class DriveService implements IDriveService {
 				filterByType = GoogleApiConstants.FOLDER;
 			} else if (fileType.equalsIgnoreCase("MS_Sheets")) {
 				filterByType = GoogleApiConstants.MS_SHEETS;
+			} else if (fileType.equalsIgnoreCase("files")) {
+				filterByType = "";
 			}
 			HttpResponse<String> response = Unirest
 					.get("https://www.googleapis.com/drive/v3/files?q=mimeType='" + filterByType + "'")
@@ -210,12 +318,27 @@ public class DriveService implements IDriveService {
 	}
 
 	@Override
-	public ResponseObject shareFileWithPermissions(String code, String fileId) {
+	public ResponseObject shareFileWithPermissions(String code, String fileId, String authToken) {
 
 		String accessToken = getAccessTokenRefreshToken(code);
 
 		try {
-
+			String authToken2 = authToken.substring(7);
+			String externalId = getUserExternalId(authToken2);
+			if (CommonUtils.isNotNull(externalId)) {
+				if (externalId.equalsIgnoreCase(MessageConstants.UNAUTHORIZED)) {
+					return new ResponseObject(null, null, HttpStatus.UNAUTHORIZED);
+				}
+			}
+			Users user = userDetailsRepository.getUserByExternalId(externalId);
+			if (user == null) {
+				return new ResponseObject(null, ErrorMessages.USER_NOT_REGISTERED, HttpStatus.BAD_REQUEST);
+			} else {
+				if (user.getType().equalsIgnoreCase(RolesEnum.STUDENT.toString())) {
+					return new ResponseObject(null, "You are not authorized to access this resource",
+							HttpStatus.UNAUTHORIZED);
+				}
+			}
 			JSONObject object = new JSONObject();
 			object.put("role", "reader");
 			object.put("type", "user");

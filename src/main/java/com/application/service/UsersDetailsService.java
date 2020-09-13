@@ -312,23 +312,44 @@ public class UsersDetailsService implements IUserDetailsService {
 	}
 
 	@Override
-	public ResponseObject registerUserExcel(MultipartFile file) throws JsonMappingException, JsonProcessingException {
+	public ResponseObject registerUserExcel(MultipartFile file, String authToken)
+			throws JsonMappingException, JsonProcessingException {
 
-		// Step 1: Read Excel File into Java List Objects
-		List<RegisterUserWithExcel> registerUserWithExcel = readExcelFile("customers", file);
+		try {
+			String authToken2 = authToken.substring(7);
+			String externalId = getUserExternalId(authToken2);
+			if (CommonUtils.isNotNull(externalId)) {
+				if (externalId.equalsIgnoreCase(MessageConstants.UNAUTHORIZED)) {
+					return new ResponseObject(null, null, HttpStatus.UNAUTHORIZED);
+				}
+			}
+			Users user = userDetailsRepository.getUserByExternalId(externalId);
+			if (user == null) {
+				return new ResponseObject(null, ErrorMessages.USER_NOT_REGISTERED, HttpStatus.BAD_REQUEST);
+			} else {
+				if (user.getType().equalsIgnoreCase(RolesEnum.STUDENT.toString())) {
+					return new ResponseObject(null, "You are not authorized to access this resource",
+							HttpStatus.UNAUTHORIZED);
+				}
+			}
+			// Step 1: Read Excel File into Java List Objects
+			List<RegisterUserWithExcel> registerUserWithExcel = readExcelFile("customers", file);
 
-		// Step 2: Write Java List Objects to JSON File
-		JSONArray jsonArray = new JSONArray(registerUserWithExcel);
-		List<RegisterUserWithExcel> list = new ArrayList<>();
-		for (int i = 0; i < jsonArray.length(); i++) {
-			RegisterUserWithExcel registrationObject = registerUserWithExcel.get(i);
-			list.add(registrationObject);
-			LOGGER.info("jsonArrayObject" + registrationObject);
+			// Step 2: Write Java List Objects to JSON File
+			JSONArray jsonArray = new JSONArray(registerUserWithExcel);
+			List<RegisterUserWithExcel> list = new ArrayList<>();
+			for (int i = 0; i < jsonArray.length(); i++) {
+				RegisterUserWithExcel registrationObject = registerUserWithExcel.get(i);
+				list.add(registrationObject);
+				LOGGER.info("jsonArrayObject" + registrationObject);
+			}
+
+			asyncUserRegisterService.registerUsersAsync(list);
+			LOGGER.info("" + list);
+			return new ResponseObject(list, null, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-
-		asyncUserRegisterService.registerUsersAsync(list);
-		LOGGER.info("" + list);
-		return new ResponseObject(list, null, HttpStatus.OK);
 	}
 
 	private static List<RegisterUserWithExcel> readExcelFile(String filePath, MultipartFile file) {

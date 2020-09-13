@@ -9,8 +9,8 @@ import net.minidev.json.parser.ParseException;
 @Service
 public interface IDriveService {
 
-	public ResponseObject getDriveFilesList(String code, String fileType);
+	public ResponseObject getDriveFilesList(String code, String fileType, String authToken);
 
-	public ResponseObject shareFileWithPermissions(String code, String fileId);
+	public ResponseObject shareFileWithPermissions(String code, String fileId, String authToken);
 
 }
