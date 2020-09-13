@@ -17,4 +17,6 @@ public interface IDriveService {
 
 	public ResponseObject getListOfFilesSharedMe(String authToken);
 
+	public ResponseObject getChildFilesInFolder(String authToken, String folderId, String code);
+
 }

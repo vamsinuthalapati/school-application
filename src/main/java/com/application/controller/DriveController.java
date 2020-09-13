@@ -35,9 +35,15 @@ public class DriveController {
 	public ResponseObject listOfFiles(@RequestHeader("Authorization") String authToken) {
 		return iDriveService.getListOFStudentFiles(authToken);
 	}
-	
+
 	@GetMapping("/sharedByMe")
 	public ResponseObject listOfFilesSharedByMe(@RequestHeader("Authorization") String authToken) {
 		return iDriveService.getListOfFilesSharedMe(authToken);
+	}
+
+	@GetMapping("/childFiles")
+	public ResponseObject listOfChildFiles(@RequestHeader("Authorization") String authToken,
+			@RequestHeader("folderId") String folderId, @RequestHeader("code") String code) {
+		return iDriveService.getChildFilesInFolder(authToken, folderId, code);
 	}
 }

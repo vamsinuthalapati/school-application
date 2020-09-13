@@ -444,4 +444,25 @@ public class DriveService implements IDriveService {
 		}
 	}
 
+	@Override
+	public ResponseObject getChildFilesInFolder(String authToken, String folderId, String accessToken) {
+
+		try {
+
+			HttpResponse<String> response = Unirest
+					.get("https://www.googleapis.com/drive/v2/files/" + folderId + "/children")
+					.header("Authorization", "Bearer " + accessToken).header("Content-Type", "application/json")
+					.asString();
+
+			String responseObject = response.getBody().toString();
+			LOGGER.info("Object :" + responseObject);
+			JSONParser parser = new JSONParser();
+			JSONObject obj = (JSONObject) parser.parse(responseObject);
+
+			return new ResponseObject(obj, null, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseObject(null, ErrorMessages.SOMETHING_WENT_WRONG, HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }
