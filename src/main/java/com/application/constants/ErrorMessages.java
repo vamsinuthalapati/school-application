@@ -17,7 +17,7 @@ public class ErrorMessages {
 
 	public final static String LOGIN_DETAILS = "Please enter your e-mail and password";
 	public final static String REGISTERED_EMAIL = "Please enter a registered e-mail address";
-	public final static String NOT_REGISTERED = "You are not currently registered. Please go to the sign-up page to register";
+	public final static String NOT_REGISTERED = "You are not currently registered. Please contact your admin!";
 	public final static String ENTER_PASSWORD = "Please enter your password";
 	public final static String PASSWORD_NOT_SET = "You have not set your password.";
 	public final static String INCORRECT_PASSWORD = "Your password is incorrect";
