@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,8 +36,11 @@ import com.application.constants.MessageConstants;
 import com.application.domain.FilesListFromDrive;
 import com.application.domain.ListOfFilesList;
 import com.application.domain.ResponseObject;
+import com.application.domain.StudentFilesDomain;
+import com.application.domain.StudentFilesObject;
 import com.application.domain.Users;
 import com.application.jwt.AuthUser;
+import com.application.repository.StudentFilesRepository;
 import com.application.repository.UserDetailsRepository;
 import com.application.roles.RolesEnum;
 import com.application.utils.CommonUtils;
@@ -66,6 +70,9 @@ public class DriveService implements IDriveService {
 
 	@Autowired
 	private UserDetailsRepository userDetailsRepository;
+
+	@Autowired
+	private StudentFilesRepository studentFilesRepository;
 
 	public static String resolveToken(HttpServletRequest req) {
 		String bearerToken = req.getHeader("Authorization");
@@ -204,9 +211,9 @@ public class DriveService implements IDriveService {
 	}
 
 	@Override
-	public ResponseObject getDriveFilesList(String code, String fileType, String authToken) {
+	public ResponseObject getDriveFilesList(String accessToken, String fileType, String authToken) {
 
-		String accessToken = getAccessTokenRefreshToken(code);
+//		String accessToken = getAccessTokenRefreshToken(code);
 
 		try {
 
@@ -318,9 +325,9 @@ public class DriveService implements IDriveService {
 	}
 
 	@Override
-	public ResponseObject shareFileWithPermissions(String code, String fileId, String authToken) {
+	public ResponseObject shareFileWithPermissions(String accessToken, String fileId, String authToken) {
 
-		String accessToken = getAccessTokenRefreshToken(code);
+//		String accessToken = getAccessTokenRefreshToken(code);
 
 		try {
 			String authToken2 = authToken.substring(7);
@@ -339,25 +346,101 @@ public class DriveService implements IDriveService {
 							HttpStatus.UNAUTHORIZED);
 				}
 			}
-			JSONObject object = new JSONObject();
-			object.put("role", "reader");
-			object.put("type", "user");
-			object.put("emailAddress", "nvjprasad@gmail.com");
-			ObjectMapper mapper = new ObjectMapper();
 
-			HttpResponse<String> response = Unirest
-					.post("https://www.googleapis.com/drive/v3/files/" + fileId + "/permissions")
+			HttpResponse<String> responseFileObject = Unirest.get("https://www.googleapis.com/drive/v3/files/" + fileId)
 					.header("Authorization", "Bearer " + accessToken).header("Content-Type", "application/json")
-					.body(mapper.writeValueAsString(object)).asString();
+					.asString();
 
-			String responseObject = response.getBody().toString();
-			LOGGER.info("Object :" + responseObject);
-			JSONParser parser = new JSONParser();
-			JSONObject obj = (JSONObject) parser.parse(responseObject);
+			String fileObject = responseFileObject.getBody().toString();
+			JSONParser parser2 = new JSONParser();
+			JSONObject obj2 = (JSONObject) parser2.parse(fileObject);
+			String mimeType = (String) obj2.get("mimeType");
+			String fileName = (String) obj2.get("name");
+			String fileUrl = "";
+			if (mimeType.equalsIgnoreCase(GoogleApiConstants.DOCS)) {
+				fileUrl = "https://docs.google.com/document/d/" + fileId + "/";
+			} else if (mimeType.equalsIgnoreCase(GoogleApiConstants.SHEETS)) {
+				fileUrl = "https://docs.google.com/spreadsheets/d/" + fileId + "/";
+			} else if (mimeType.equalsIgnoreCase(GoogleApiConstants.SLIDES)) {
+				fileUrl = "https://docs.google.com/presentation/d/" + fileId + "/";
+			}
 
-			return new ResponseObject(obj, null, HttpStatus.OK);
+			StudentFilesDomain studentFilesObject = new StudentFilesDomain(UUID.randomUUID().toString(), fileId,
+					fileUrl, mimeType, user.getEmail(), Calendar.getInstance(), Calendar.getInstance());
+			studentFilesRepository.saveAndFlush(studentFilesObject);
+
+			List<Users> usersList = userDetailsRepository.getAllUsersByType(RolesEnum.STUDENT.toString());
+			for (Users users : usersList) {
+				JSONObject object = new JSONObject();
+				object.put("role", "reader");
+				object.put("type", "user");
+				object.put("emailAddress", users.getEmail());
+				ObjectMapper mapper = new ObjectMapper();
+
+				HttpResponse<String> response = Unirest
+						.post("https://www.googleapis.com/drive/v3/files/" + fileId + "/permissions")
+						.header("Authorization", "Bearer " + accessToken).header("Content-Type", "application/json")
+						.body(mapper.writeValueAsString(object)).asString();
+
+				String responseObject = response.getBody().toString();
+				LOGGER.info("Object :" + responseObject);
+				JSONParser parser = new JSONParser();
+				JSONObject obj = (JSONObject) parser.parse(responseObject);
+			}
+
+			return new ResponseObject("Shared files successfully!", null, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseObject(e.getMessage(), "Error", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Override
+	public ResponseObject getListOFStudentFiles(String authToken) {
+
+		try {
+			String authToken2 = authToken.substring(7);
+			String externalId = getUserExternalId(authToken2);
+			if (CommonUtils.isNotNull(externalId)) {
+				if (externalId.equalsIgnoreCase(MessageConstants.UNAUTHORIZED)) {
+					return new ResponseObject(null, null, HttpStatus.UNAUTHORIZED);
+				}
+			}
+			Users user = userDetailsRepository.getUserByExternalId(externalId);
+			if (user == null) {
+				return new ResponseObject(null, ErrorMessages.USER_NOT_REGISTERED, HttpStatus.BAD_REQUEST);
+			}
+			List<StudentFilesObject> filesObject = studentFilesRepository.getFiles();
+			return new ResponseObject(filesObject, null, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseObject(null, ErrorMessages.SOMETHING_WENT_WRONG, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Override
+	public ResponseObject getListOfFilesSharedMe(String authToken) {
+		try {
+			String authToken2 = authToken.substring(7);
+			String externalId = getUserExternalId(authToken2);
+			if (CommonUtils.isNotNull(externalId)) {
+				if (externalId.equalsIgnoreCase(MessageConstants.UNAUTHORIZED)) {
+					return new ResponseObject(null, null, HttpStatus.UNAUTHORIZED);
+				}
+			}
+			Users user = userDetailsRepository.getUserByExternalId(externalId);
+			if (user == null) {
+				return new ResponseObject(null, ErrorMessages.USER_NOT_REGISTERED, HttpStatus.BAD_REQUEST);
+			} else {
+				if (user.getType().equalsIgnoreCase(RolesEnum.STUDENT.toString())) {
+					return new ResponseObject(null, "You are not authorized to access this resource",
+							HttpStatus.UNAUTHORIZED);
+				}
+			}
+			List<StudentFilesObject> filesObject = studentFilesRepository.getFilesByEmail(user.getEmail());
+			return new ResponseObject(filesObject, null, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseObject(null, ErrorMessages.SOMETHING_WENT_WRONG, HttpStatus.BAD_REQUEST);
 		}
 	}
 

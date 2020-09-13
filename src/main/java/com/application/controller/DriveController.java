@@ -20,12 +20,24 @@ public class DriveController {
 	public IDriveService iDriveService;
 
 	@GetMapping("/filesList")
-	public ResponseObject getFilesList(@RequestHeader("code") String code, @RequestHeader("fileType") String fileType, @RequestHeader ("Authorization") String authToken) {
+	public ResponseObject getFilesList(@RequestHeader("code") String code, @RequestHeader("fileType") String fileType,
+			@RequestHeader("Authorization") String authToken) {
 		return iDriveService.getDriveFilesList(code, fileType, authToken);
 	}
 
 	@PostMapping("/shareFiles")
-	public ResponseObject shareFiles(@RequestHeader("code") String code, @RequestHeader String fileId, @RequestHeader ("Authorization") String authToken) {
+	public ResponseObject shareFiles(@RequestHeader("code") String code, @RequestHeader String fileId,
+			@RequestHeader("Authorization") String authToken) {
 		return iDriveService.shareFileWithPermissions(code, fileId, authToken);
+	}
+
+	@GetMapping("/sharedFilesList")
+	public ResponseObject listOfFiles(@RequestHeader("Authorization") String authToken) {
+		return iDriveService.getListOFStudentFiles(authToken);
+	}
+	
+	@GetMapping("/sharedByMe")
+	public ResponseObject listOfFilesSharedByMe(@RequestHeader("Authorization") String authToken) {
+		return iDriveService.getListOfFilesSharedMe(authToken);
 	}
 }

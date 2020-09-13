@@ -13,4 +13,8 @@ public interface IDriveService {
 
 	public ResponseObject shareFileWithPermissions(String code, String fileId, String authToken);
 
+	public ResponseObject getListOFStudentFiles(String authToken);
+
+	public ResponseObject getListOfFilesSharedMe(String authToken);
+
 }
