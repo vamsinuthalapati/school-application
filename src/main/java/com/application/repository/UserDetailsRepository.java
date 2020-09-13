@@ -35,4 +35,7 @@ public interface UserDetailsRepository extends JpaRepository<Users, Long> {
 
 	@Query(value = "select new com.application.domain.RegisterUserWithExcel(u.email, u.firstName, u.lastName, u.type) from Users u", nativeQuery = false)
 	public List<RegisterUserWithExcel> getAllUsersExcelClass();
+
+	@Query(value = "select u from Users u where u.type = :type", nativeQuery = false)
+	public List<Users> getAllUsersByType(String type);
 }
