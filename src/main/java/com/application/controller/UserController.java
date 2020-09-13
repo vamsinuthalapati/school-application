@@ -56,7 +56,7 @@ public class UserController {
 	}
 
 	@PostMapping("/registerWithExcel")
-	public ResponseObject registerUserExcel(@RequestParam("file") MultipartFile file) throws JsonMappingException, JsonProcessingException {
-		return userDetailsService.registerUserExcel(file);
+	public ResponseObject registerUserExcel(@RequestParam("file") MultipartFile file, @RequestHeader ("Authorization") String authToken) throws JsonMappingException, JsonProcessingException {
+		return userDetailsService.registerUserExcel(file, authToken);
 	}
 }
