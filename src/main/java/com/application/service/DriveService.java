@@ -417,4 +417,31 @@ public class DriveService implements IDriveService {
 		}
 	}
 
+	@Override
+	public ResponseObject getListOfFilesSharedMe(String authToken) {
+		try {
+			String authToken2 = authToken.substring(7);
+			String externalId = getUserExternalId(authToken2);
+			if (CommonUtils.isNotNull(externalId)) {
+				if (externalId.equalsIgnoreCase(MessageConstants.UNAUTHORIZED)) {
+					return new ResponseObject(null, null, HttpStatus.UNAUTHORIZED);
+				}
+			}
+			Users user = userDetailsRepository.getUserByExternalId(externalId);
+			if (user == null) {
+				return new ResponseObject(null, ErrorMessages.USER_NOT_REGISTERED, HttpStatus.BAD_REQUEST);
+			} else {
+				if (user.getType().equalsIgnoreCase(RolesEnum.STUDENT.toString())) {
+					return new ResponseObject(null, "You are not authorized to access this resource",
+							HttpStatus.UNAUTHORIZED);
+				}
+			}
+			List<StudentFilesObject> filesObject = studentFilesRepository.getFilesByEmail(user.getEmail());
+			return new ResponseObject(filesObject, null, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseObject(null, ErrorMessages.SOMETHING_WENT_WRONG, HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }

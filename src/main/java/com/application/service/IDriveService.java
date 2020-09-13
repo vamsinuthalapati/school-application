@@ -15,4 +15,6 @@ public interface IDriveService {
 
 	public ResponseObject getListOFStudentFiles(String authToken);
 
+	public ResponseObject getListOfFilesSharedMe(String authToken);
+
 }

@@ -15,4 +15,7 @@ public interface StudentFilesRepository extends JpaRepository<StudentFilesDomain
 	@Query(value = "select new com.application.domain.StudentFilesObject(s.fileId, s.fileUrl, s.mimeType, s.sharedBy, s.createdOn) from StudentFilesDomain s", nativeQuery = false)
 	public List<StudentFilesObject> getFiles();
 
+	@Query(value = "select new com.application.domain.StudentFilesObject(s.fileId, s.fileUrl, s.mimeType, s.sharedBy, s.createdOn) from StudentFilesDomain s where s.sharedBy = :email", nativeQuery = false)
+	public List<StudentFilesObject> getFilesByEmail(String email);
+
 }
