@@ -211,9 +211,9 @@ public class DriveService implements IDriveService {
 	}
 
 	@Override
-	public ResponseObject getDriveFilesList(String code, String fileType, String authToken) {
+	public ResponseObject getDriveFilesList(String accessToken, String fileType, String authToken) {
 
-		String accessToken = getAccessTokenRefreshToken(code);
+//		String accessToken = getAccessTokenRefreshToken(code);
 
 		try {
 
@@ -325,9 +325,9 @@ public class DriveService implements IDriveService {
 	}
 
 	@Override
-	public ResponseObject shareFileWithPermissions(String code, String fileId, String authToken) {
+	public ResponseObject shareFileWithPermissions(String accessToken, String fileId, String authToken) {
 
-		String accessToken = getAccessTokenRefreshToken(code);
+//		String accessToken = getAccessTokenRefreshToken(code);
 
 		try {
 			String authToken2 = authToken.substring(7);
