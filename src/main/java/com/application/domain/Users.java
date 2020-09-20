@@ -35,6 +35,8 @@ public class Users {
 	private Calendar modifiedOn;
 	@Column(name = "is_email_verified")
 	private Boolean isEmailVerified;
+	@Column(name = "stream")
+	private String stream;
 
 	public Long getId() {
 		return id;
@@ -116,6 +118,14 @@ public class Users {
 		this.isEmailVerified = isEmailVerified;
 	}
 
+	public String getStream() {
+		return stream;
+	}
+
+	public void setStream(String stream) {
+		this.stream = stream;
+	}
+
 	public Users(Long id, String externalId, String firstName, String lastName, String email, String password,
 			String type, Calendar createdOn, Calendar modifiedOn, Boolean isEmailVerified) {
 		super();
@@ -136,7 +146,7 @@ public class Users {
 	}
 
 	public Users(String externalId, String firstName, String lastName, String email, String password, String type,
-			Calendar createdOn, Calendar modifiedOn, Boolean isEmailVerified) {
+			Calendar createdOn, Calendar modifiedOn, Boolean isEmailVerified, String stream) {
 		super();
 		this.externalId = externalId;
 		this.firstName = firstName;
@@ -147,13 +157,14 @@ public class Users {
 		this.createdOn = createdOn;
 		this.modifiedOn = modifiedOn;
 		this.isEmailVerified = isEmailVerified;
+		this.stream = stream;
 	}
 
 	@Override
 	public String toString() {
 		return "Users [id=" + id + ", externalId=" + externalId + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", email=" + email + ", password=" + password + ", type=" + type + ", createdOn=" + createdOn
-				+ ", modifiedOn=" + modifiedOn + ", isEmailVerified=" + isEmailVerified + "]";
+				+ ", modifiedOn=" + modifiedOn + ", isEmailVerified=" + isEmailVerified + ", stream=" + stream + "]";
 	}
 
 }

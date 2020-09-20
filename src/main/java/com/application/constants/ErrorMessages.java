@@ -4,6 +4,7 @@ public class ErrorMessages {
 
 	public final static String DETAILS_REQUIRED = "Please provide your details";
 	public final static String FIRST_NAME_REQUIRED = "Please provide your first name";
+	public final static String STREAM_REQUIRED = "Please provide department";
 	public final String LAST_NAME_REQUIRED = "Please provide your last name";
 	public final String COMPANY_NAME_REQUIRED = "Please provide your company name";
 	public final static String EMAIL_REQUIRED = "Please provide your valid e-mail address";

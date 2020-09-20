@@ -90,7 +90,8 @@ public class AsyncUserRegisterService {
 
 			Users user = new Users(UUID.randomUUID().toString(), excelList.get(k).getFirstName(),
 					excelList.get(k).getLastName(), excelList.get(k).getEmail(), passwordEncoder.encode(PASSWORD),
-					excelList.get(k).getType(), Calendar.getInstance(), Calendar.getInstance(), false);
+					excelList.get(k).getType(), Calendar.getInstance(), Calendar.getInstance(), false,
+					excelList.get(k).getStream());
 			Users savedUser = userDetailsRepository.saveAndFlush(user);
 
 			Students students = new Students(UUID.randomUUID().toString(), excelList.get(k).getStream(),

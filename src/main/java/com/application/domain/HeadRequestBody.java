@@ -8,6 +8,7 @@ public class HeadRequestBody {
 	private String password;
 	private String contactNumber;
 	private String countryCode;
+	private String stream;
 
 	public String getEmail() {
 		return email;
@@ -57,8 +58,16 @@ public class HeadRequestBody {
 		this.countryCode = countryCode;
 	}
 
+	public String getStream() {
+		return stream;
+	}
+
+	public void setStream(String stream) {
+		this.stream = stream;
+	}
+
 	public HeadRequestBody(String email, String firstName, String lastName, String password, String contactNumber,
-			String countryCode) {
+			String countryCode, String stream) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
@@ -66,6 +75,7 @@ public class HeadRequestBody {
 		this.password = password;
 		this.contactNumber = contactNumber;
 		this.countryCode = countryCode;
+		this.stream = stream;
 	}
 
 	public HeadRequestBody() {
@@ -75,7 +85,8 @@ public class HeadRequestBody {
 	@Override
 	public String toString() {
 		return "HeadRequestBody [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", password="
-				+ password + ", contactNumber=" + contactNumber + ", countryCode=" + countryCode + "]";
+				+ password + ", contactNumber=" + contactNumber + ", countryCode=" + countryCode + ", stream=" + stream
+				+ "]";
 	}
 
 }

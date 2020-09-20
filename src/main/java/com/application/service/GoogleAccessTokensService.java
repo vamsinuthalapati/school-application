@@ -168,16 +168,16 @@ public class GoogleAccessTokensService implements IGoogleAccessTokensService {
 					if (status == 200) {
 						GetNewAccessTokenObject newToken = (GetNewAccessTokenObject) newAccessToken.getResponse();
 						UserInfo userInfo = new UserInfo(user.getEmail(), user.getFirstName(), user.getLastName(),
-								user.getType(), newToken.getAccessToken(), newToken.getExpiryTime());
+								user.getType(), user.getStream(), newToken.getAccessToken(), newToken.getExpiryTime());
 						return new ResponseObject(userInfo, null, HttpStatus.OK);
 					} else {
 						UserInfo userInfo = new UserInfo(user.getEmail(), user.getFirstName(), user.getLastName(),
-								user.getType(), "Refresh token expired!", null);
+								user.getType(), user.getStream(), "Refresh token expired!", null);
 						return new ResponseObject(userInfo, null, HttpStatus.OK);
 					}
 				} else {
 					UserInfo userInfo = new UserInfo(user.getEmail(), user.getFirstName(), user.getLastName(),
-							user.getType(), "Please store refresh token!", null);
+							user.getType(), user.getStream(), "Please store refresh token!", null);
 					return new ResponseObject(userInfo, null, HttpStatus.OK);
 				}
 			}

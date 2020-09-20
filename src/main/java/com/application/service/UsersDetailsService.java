@@ -282,6 +282,9 @@ public class UsersDetailsService implements IUserDetailsService {
 			if (CommonUtils.isNull(headRequestBody.getFirstName())) {
 				return new ResponseObject(null, ErrorMessages.FIRST_NAME_REQUIRED, HttpStatus.BAD_REQUEST);
 			}
+			if (CommonUtils.isNull(headRequestBody.getStream())) {
+				return new ResponseObject(null, ErrorMessages.STREAM_REQUIRED, HttpStatus.BAD_REQUEST);
+			}
 
 			List<Users> users = userDetailsRepository.getAllUsers();
 			for (Users allUsers : users) {
@@ -293,7 +296,7 @@ public class UsersDetailsService implements IUserDetailsService {
 			Users user = new Users(UUID.randomUUID().toString(), headRequestBody.getFirstName(),
 					headRequestBody.getLastName(), headRequestBody.getEmail(),
 					passwordEncoder.encode(headRequestBody.getPassword()), RolesEnum.ADMIN.toString(),
-					Calendar.getInstance(), Calendar.getInstance(), false);
+					Calendar.getInstance(), Calendar.getInstance(), false, headRequestBody.getStream());
 			Users savedUser = userDetailsRepository.saveAndFlush(user);
 
 			Authentication authentication = authenticationManager.authenticate(

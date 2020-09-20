@@ -366,7 +366,8 @@ public class DriveService implements IDriveService {
 			}
 
 			StudentFilesDomain studentFilesObject = new StudentFilesDomain(UUID.randomUUID().toString(), fileId,
-					fileUrl, mimeType, user.getEmail(), Calendar.getInstance(), Calendar.getInstance());
+					fileUrl, mimeType, user.getEmail(), user.getStream(), Calendar.getInstance(),
+					Calendar.getInstance());
 			studentFilesRepository.saveAndFlush(studentFilesObject);
 
 			List<Users> usersList = userDetailsRepository.getAllUsersByType(RolesEnum.STUDENT.toString());

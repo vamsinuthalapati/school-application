@@ -27,6 +27,8 @@ public class StudentFilesDomain {
 	private String mimeType;
 	@Column(name = "shared_by")
 	private String sharedBy;
+	@Column(name = "department")
+	private String stream;
 	@Column(name = "created_on")
 	private Calendar createdOn;
 	@Column(name = "modified_on")
@@ -80,6 +82,14 @@ public class StudentFilesDomain {
 		this.sharedBy = sharedBy;
 	}
 
+	public String getStream() {
+		return stream;
+	}
+
+	public void setStream(String stream) {
+		this.stream = stream;
+	}
+
 	public Calendar getCreatedOn() {
 		return createdOn;
 	}
@@ -97,13 +107,14 @@ public class StudentFilesDomain {
 	}
 
 	public StudentFilesDomain(String externalId, String fileId, String fileUrl, String mimeType, String sharedBy,
-			Calendar createdOn, Calendar modifiedOn) {
+			String stream, Calendar createdOn, Calendar modifiedOn) {
 		super();
 		this.externalId = externalId;
 		this.fileId = fileId;
 		this.fileUrl = fileUrl;
 		this.mimeType = mimeType;
 		this.sharedBy = sharedBy;
+		this.stream = stream;
 		this.createdOn = createdOn;
 		this.modifiedOn = modifiedOn;
 	}
@@ -115,8 +126,8 @@ public class StudentFilesDomain {
 	@Override
 	public String toString() {
 		return "StudentFilesDomain [id=" + id + ", externalId=" + externalId + ", fileId=" + fileId + ", fileUrl="
-				+ fileUrl + ", mimeType=" + mimeType + ", sharedBy=" + sharedBy + ", createdOn=" + createdOn
-				+ ", modifiedOn=" + modifiedOn + "]";
+				+ fileUrl + ", mimeType=" + mimeType + ", sharedBy=" + sharedBy + ", stream=" + stream + ", createdOn="
+				+ createdOn + ", modifiedOn=" + modifiedOn + "]";
 	}
 
 }

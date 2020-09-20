@@ -6,6 +6,7 @@ public class UserInfo {
 	private String firstName;
 	private String lastName;
 	private String type;
+	private String department;
 	private String accessToken;
 	private String expiryTime;
 
@@ -41,6 +42,14 @@ public class UserInfo {
 		this.type = type;
 	}
 
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
 	public String getAccessToken() {
 		return accessToken;
 	}
@@ -57,13 +66,14 @@ public class UserInfo {
 		this.expiryTime = expiryTime;
 	}
 
-	public UserInfo(String email, String firstName, String lastName, String type, String accessToken,
+	public UserInfo(String email, String firstName, String lastName, String type, String department, String accessToken,
 			String expiryTime) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.type = type;
+		this.department = department;
 		this.accessToken = accessToken;
 		this.expiryTime = expiryTime;
 	}
@@ -75,7 +85,7 @@ public class UserInfo {
 	@Override
 	public String toString() {
 		return "UserInfo [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", type=" + type
-				+ ", accessToken=" + accessToken + ", expiryTime=" + expiryTime + "]";
+				+ ", department=" + department + ", accessToken=" + accessToken + ", expiryTime=" + expiryTime + "]";
 	}
 
 }
