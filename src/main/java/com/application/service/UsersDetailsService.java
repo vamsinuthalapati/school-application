@@ -333,7 +333,7 @@ public class UsersDetailsService implements IUserDetailsService {
 				}
 			}
 			// Step 1: Read Excel File into Java List Objects
-			List<RegisterUserWithExcel> registerUserWithExcel = readExcelFile("customers", file);
+			List<RegisterUserWithExcel> registerUserWithExcel = readExcelFile("students", file);
 
 			// Step 2: Write Java List Objects to JSON File
 			JSONArray jsonArray = new JSONArray(registerUserWithExcel);
@@ -352,7 +352,7 @@ public class UsersDetailsService implements IUserDetailsService {
 		}
 	}
 
-	private static List<RegisterUserWithExcel> readExcelFile(String filePath, MultipartFile file) {
+	public static List<RegisterUserWithExcel> readExcelFile(String filePath, MultipartFile file) {
 		try {
 			File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + filePath);
 			file.transferTo(convFile);
@@ -388,14 +388,22 @@ public class UsersDetailsService implements IUserDetailsService {
 						registerUserWithExcel.setFirstName(currentCell.getStringCellValue());
 					} else if (cellIndex == 2) { // Address
 						registerUserWithExcel.setLastName(currentCell.getStringCellValue());
-					} else if (cellIndex == 3) { // Address
+					} else if (cellIndex == 3) { // Type
 						registerUserWithExcel.setType(currentCell.getStringCellValue());
+					} else if (cellIndex == 4) { // stream
+						registerUserWithExcel.setStream(currentCell.getStringCellValue());
+					} else if (cellIndex == 5) { // semester
+						registerUserWithExcel.setSemester(String.valueOf(currentCell.getStringCellValue()));
+					} else if (cellIndex == 6) { // year
+						registerUserWithExcel.setYear(String.valueOf(currentCell.getStringCellValue()));
 					}
 
 					cellIndex++;
 				}
 
-				lstCustomers.add(registerUserWithExcel);
+				if (registerUserWithExcel.getType().equalsIgnoreCase(RolesEnum.STUDENT.toString())) {
+					lstCustomers.add(registerUserWithExcel);
+				}
 			}
 
 			// Close WorkBook

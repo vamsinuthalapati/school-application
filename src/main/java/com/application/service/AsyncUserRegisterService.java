@@ -16,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.application.domain.RegisterUserWithExcel;
+import com.application.domain.Students;
 import com.application.domain.Users;
+import com.application.repository.StudentsRepository;
 import com.application.repository.UserDetailsRepository;
 import com.application.roles.RolesEnum;
 import com.application.security.JwtTokenProvider;
@@ -29,6 +31,9 @@ public class AsyncUserRegisterService {
 
 	@Autowired
 	private UserDetailsRepository userDetailsRepository;
+
+	@Autowired
+	private StudentsRepository studentsRepository;
 
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
@@ -81,6 +86,10 @@ public class AsyncUserRegisterService {
 					excelList.get(k).getLastName(), excelList.get(k).getEmail(), passwordEncoder.encode(PASSWORD),
 					excelList.get(k).getType(), Calendar.getInstance(), Calendar.getInstance(), false);
 			Users savedUser = userDetailsRepository.saveAndFlush(user);
+
+			Students students = new Students(UUID.randomUUID().toString(), excelList.get(k).getStream(),
+					excelList.get(k).getSemester(), null, excelList.get(k).getYear(), savedUser);
+			studentsRepository.saveAndFlush(students);
 
 			LOGGER.info("registered user :" + excelList.get(k).getEmail());
 		}

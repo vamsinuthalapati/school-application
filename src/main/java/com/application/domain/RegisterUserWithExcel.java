@@ -12,6 +12,12 @@ public class RegisterUserWithExcel {
 	private String lastName;
 	@JsonProperty(value = "type")
 	private String type;
+	@JsonProperty(value = "stream")
+	private String stream;
+	@JsonProperty(value = "semester")
+	private String semester;
+	@JsonProperty(value = "year")
+	private String year;
 
 	public String getEmail() {
 		return email;
@@ -45,6 +51,42 @@ public class RegisterUserWithExcel {
 		this.type = type;
 	}
 
+	public String getStream() {
+		return stream;
+	}
+
+	public void setStream(String stream) {
+		this.stream = stream;
+	}
+
+	public String getSemester() {
+		return semester;
+	}
+
+	public void setSemester(String semester) {
+		this.semester = semester;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public RegisterUserWithExcel(String email, String firstName, String lastName, String type, String stream,
+			String semester, String year) {
+		super();
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.type = type;
+		this.stream = stream;
+		this.semester = semester;
+		this.year = year;
+	}
+
 	public RegisterUserWithExcel(String email, String firstName, String lastName, String type) {
 		super();
 		this.email = email;
@@ -69,7 +111,7 @@ public class RegisterUserWithExcel {
 	@Override
 	public String toString() {
 		return "RegisterUserWithExcel [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", type=" + type + "]";
+				+ ", type=" + type + ", stream=" + stream + ", semester=" + semester + ", year=" + year + "]";
 	}
 
 }
