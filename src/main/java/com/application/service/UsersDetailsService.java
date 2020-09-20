@@ -34,11 +34,13 @@ import com.application.domain.HeadRequestBody;
 import com.application.domain.LoginRequest;
 import com.application.domain.RegisterUserWithExcel;
 import com.application.domain.ResponseObject;
+import com.application.domain.Students;
 import com.application.domain.SubjectsObject;
 import com.application.domain.UpdatePassword;
 import com.application.domain.Users;
 import com.application.jwt.AuthUser;
 import com.application.jwt.JwtAuthenticationResponse;
+import com.application.repository.StudentsRepository;
 import com.application.repository.UserDetailsRepository;
 import com.application.roles.RolesEnum;
 import com.application.security.JwtTokenProvider;
@@ -77,6 +79,9 @@ public class UsersDetailsService implements IUserDetailsService {
 
 	@Autowired
 	private AsyncUserRegisterService asyncUserRegisterService;
+
+	@Autowired
+	private StudentsRepository studentsRepository;
 
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
@@ -512,6 +517,18 @@ public class UsersDetailsService implements IUserDetailsService {
 
 		IOException e) {
 			throw new RuntimeException("FAIL! -> message = " + e.getMessage());
+		}
+	}
+
+	@Override
+	public ResponseObject getListOfStudents() {
+
+		try {
+			List<Students> students = studentsRepository.findAll();
+
+			return new ResponseObject(students, null, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 

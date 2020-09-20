@@ -68,6 +68,11 @@ public class UserController {
 		return userDetailsService.registerSubjectsExcel(file, authToken);
 	}
 
+	@GetMapping("/listOfStudents")
+	public ResponseObject getListOfStudents() {
+		return userDetailsService.getListOfStudents();
+	}
+
 	@GetMapping("/start")
 	public String start() {
 		return "hello world!!";

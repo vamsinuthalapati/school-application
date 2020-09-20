@@ -68,8 +68,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html",
 						"/**/*.css", "/**/*.js")
-				.permitAll().antMatchers("/api/v1/login", "/api/v1/signUp", "/api/v1/customerSupport",
-						"/api/v1/forgotPwd", "/api/v1/updatePwd", "/api/v1/registerHead", "/api/v1/registerWithExcel", "/api/v1/start")
+				.permitAll()
+				.antMatchers("/api/v1/login", "/api/v1/signUp", "/api/v1/customerSupport", "/api/v1/forgotPwd",
+						"/api/v1/updatePwd", "/api/v1/registerHead", "/api/v1/registerWithExcel", "/api/v1/start",
+						"/api/v1/listOfStudents")
 				.permitAll()
 //							.anyRequest().authenticated();
 //	                .antMatchers("/api/yourEndpoint")

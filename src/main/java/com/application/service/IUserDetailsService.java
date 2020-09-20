@@ -25,4 +25,6 @@ public interface IUserDetailsService {
 	public ResponseObject registerUserExcel(MultipartFile file, String authToken) throws JsonMappingException, JsonProcessingException;
 
 	public ResponseObject registerSubjectsExcel(MultipartFile file, String authToken);
+
+	public ResponseObject getListOfStudents();
 }
