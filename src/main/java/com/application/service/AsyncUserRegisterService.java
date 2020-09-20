@@ -17,8 +17,11 @@ import org.springframework.stereotype.Service;
 
 import com.application.domain.RegisterUserWithExcel;
 import com.application.domain.Students;
+import com.application.domain.Subjects;
+import com.application.domain.SubjectsObject;
 import com.application.domain.Users;
 import com.application.repository.StudentsRepository;
+import com.application.repository.SubjectsRepository;
 import com.application.repository.UserDetailsRepository;
 import com.application.roles.RolesEnum;
 import com.application.security.JwtTokenProvider;
@@ -34,6 +37,9 @@ public class AsyncUserRegisterService {
 
 	@Autowired
 	private StudentsRepository studentsRepository;
+
+	@Autowired
+	private SubjectsRepository subjectsRepository;
 
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
@@ -93,5 +99,43 @@ public class AsyncUserRegisterService {
 
 			LOGGER.info("registered user :" + excelList.get(k).getEmail());
 		}
+	}
+
+	public void registerSubjectsAsync(List<SubjectsObject> list) {
+
+		List<SubjectsObject> excelList = list;
+
+		List<SubjectsObject> dbList = subjectsRepository.getAllSubjectsExcelClass();
+
+		List<SubjectsObject> removeList = new ArrayList<>();
+
+		LOGGER.info("excel List :" + excelList);
+
+		LOGGER.info("db List :" + dbList);
+
+		for (int i = 0; i < excelList.size(); i++) {
+
+			for (int j = 0; j < dbList.size(); j++) {
+
+				if (excelList.get(i).getSubjectId().equals(dbList.get(j).getSubjectId())) {
+
+					removeList.add(dbList.get(j));
+				}
+			}
+		}
+
+		LOGGER.info("remove List :" + removeList);
+		if (removeList.size() != 0) {
+			LOGGER.info("removing already registered account List :" + excelList.removeAll(removeList));
+		}
+		LOGGER.info("final List :" + excelList);
+
+		for (int k = 0; k < excelList.size(); k++) {
+
+			Subjects subjects = new Subjects(UUID.randomUUID().toString(), excelList.get(k).getStream(),
+					excelList.get(k).getSubjectName(), excelList.get(k).getSubjectId(), null);
+			subjectsRepository.saveAndFlush(subjects);
+		}
+
 	}
 }

@@ -34,6 +34,7 @@ import com.application.domain.HeadRequestBody;
 import com.application.domain.LoginRequest;
 import com.application.domain.RegisterUserWithExcel;
 import com.application.domain.ResponseObject;
+import com.application.domain.SubjectsObject;
 import com.application.domain.UpdatePassword;
 import com.application.domain.Users;
 import com.application.jwt.AuthUser;
@@ -411,6 +412,102 @@ public class UsersDetailsService implements IUserDetailsService {
 
 			return lstCustomers;
 		} catch (IOException e) {
+			throw new RuntimeException("FAIL! -> message = " + e.getMessage());
+		}
+	}
+
+	@Override
+	public ResponseObject registerSubjectsExcel(MultipartFile file, String authToken) {
+
+		try {
+			String authToken2 = authToken.substring(7);
+			String externalId = getUserExternalId(authToken2);
+			if (CommonUtils.isNotNull(externalId)) {
+				if (externalId.equalsIgnoreCase(MessageConstants.UNAUTHORIZED)) {
+					return new ResponseObject(null, null, HttpStatus.UNAUTHORIZED);
+				}
+			}
+			Users user = userDetailsRepository.getUserByExternalId(externalId);
+			if (user == null) {
+				return new ResponseObject(null, ErrorMessages.USER_NOT_REGISTERED, HttpStatus.BAD_REQUEST);
+			} else {
+				if (user.getType().equalsIgnoreCase(RolesEnum.STUDENT.toString())) {
+					return new ResponseObject(null, "You are not authorized to access this resource",
+							HttpStatus.UNAUTHORIZED);
+				}
+			}
+
+			// Step 1: Read Excel File into Java List Objects
+			List<SubjectsObject> registerSubjectsWithExcel = readSubjectsExcelFile("students", file);
+
+			// Step 2: Write Java List Objects to JSON File
+			JSONArray jsonArray = new JSONArray(registerSubjectsWithExcel);
+			List<SubjectsObject> list = new ArrayList<>();
+			for (int i = 0; i < jsonArray.length(); i++) {
+				SubjectsObject registrationObject = registerSubjectsWithExcel.get(i);
+				list.add(registrationObject);
+				LOGGER.info("jsonArrayObject" + registrationObject);
+			}
+
+			asyncUserRegisterService.registerSubjectsAsync(list);
+			LOGGER.info("" + list);
+			return new ResponseObject(list, null, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	public static List<SubjectsObject> readSubjectsExcelFile(String filePath, MultipartFile file) {
+		try {
+			File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + filePath);
+			file.transferTo(convFile);
+			FileInputStream excelFile = new FileInputStream(convFile);
+			Workbook workbook = new XSSFWorkbook(excelFile);
+
+			Sheet sheet = workbook.getSheet("Sheet1");
+			Iterator<Row> rows = sheet.iterator();
+
+			List<SubjectsObject> lstCustomers = new ArrayList<SubjectsObject>();
+
+			int rowNumber = 0;
+			while (rows.hasNext()) {
+				Row currentRow = rows.next();
+
+				// skip header
+				if (rowNumber == 0) {
+					rowNumber++;
+					continue;
+				}
+
+				Iterator<Cell> cellsInRow = currentRow.iterator();
+
+				SubjectsObject registerUserWithExcel = new SubjectsObject();
+
+				int cellIndex = 0;
+				while (cellsInRow.hasNext()) {
+					Cell currentCell = cellsInRow.next();
+
+					if (cellIndex == 0) { // ID
+						registerUserWithExcel.setStream(String.valueOf(currentCell.getStringCellValue()));
+					} else if (cellIndex == 1) { // Name
+						registerUserWithExcel.setSubjectId(currentCell.getStringCellValue());
+					} else if (cellIndex == 2) { // Address
+						registerUserWithExcel.setSubjectName(currentCell.getStringCellValue());
+					}
+
+					cellIndex++;
+				}
+
+				lstCustomers.add(registerUserWithExcel);
+			}
+
+			// Close WorkBook
+			workbook.close();
+
+			return lstCustomers;
+		} catch (
+
+		IOException e) {
 			throw new RuntimeException("FAIL! -> message = " + e.getMessage());
 		}
 	}

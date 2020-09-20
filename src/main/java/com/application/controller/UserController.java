@@ -62,6 +62,12 @@ public class UserController {
 		return userDetailsService.registerUserExcel(file, authToken);
 	}
 
+	@PostMapping("/registerSubjectsWithExcel")
+	public ResponseObject registerSubjectsExcel(@RequestParam("file") MultipartFile file,
+			@RequestHeader("Authorization") String authToken) {
+		return userDetailsService.registerSubjectsExcel(file, authToken);
+	}
+
 	@GetMapping("/start")
 	public String start() {
 		return "hello world!!";
