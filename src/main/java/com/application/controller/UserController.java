@@ -73,6 +73,11 @@ public class UserController {
 		return userDetailsService.getListOfStudents();
 	}
 
+	@GetMapping("/listOfSubjects")
+	public ResponseObject getListOfSubjects() {
+		return userDetailsService.getListOfSubjects();
+	}
+
 	@GetMapping("/start")
 	public String start() {
 		return "hello world!!";

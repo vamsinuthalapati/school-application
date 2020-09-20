@@ -35,12 +35,14 @@ import com.application.domain.LoginRequest;
 import com.application.domain.RegisterUserWithExcel;
 import com.application.domain.ResponseObject;
 import com.application.domain.Students;
+import com.application.domain.Subjects;
 import com.application.domain.SubjectsObject;
 import com.application.domain.UpdatePassword;
 import com.application.domain.Users;
 import com.application.jwt.AuthUser;
 import com.application.jwt.JwtAuthenticationResponse;
 import com.application.repository.StudentsRepository;
+import com.application.repository.SubjectsRepository;
 import com.application.repository.UserDetailsRepository;
 import com.application.roles.RolesEnum;
 import com.application.security.JwtTokenProvider;
@@ -82,6 +84,9 @@ public class UsersDetailsService implements IUserDetailsService {
 
 	@Autowired
 	private StudentsRepository studentsRepository;
+
+	@Autowired
+	private SubjectsRepository subjectsRepository;
 
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
@@ -527,6 +532,19 @@ public class UsersDetailsService implements IUserDetailsService {
 			List<Students> students = studentsRepository.findAll();
 
 			return new ResponseObject(students, null, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@Override
+	public ResponseObject getListOfSubjects() {
+
+		try {
+
+			List<Subjects> subjects = subjectsRepository.findAll();
+
+			return new ResponseObject(subjects, null, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

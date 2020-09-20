@@ -27,4 +27,6 @@ public interface IUserDetailsService {
 	public ResponseObject registerSubjectsExcel(MultipartFile file, String authToken);
 
 	public ResponseObject getListOfStudents();
+
+	public ResponseObject getListOfSubjects();
 }
