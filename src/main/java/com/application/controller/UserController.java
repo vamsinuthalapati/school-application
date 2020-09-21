@@ -78,6 +78,12 @@ public class UserController {
 		return userDetailsService.getListOfSubjects();
 	}
 
+	@PostMapping("/registerTeacher")
+	public ResponseObject registerTeacher(@RequestHeader("Authorization") String authToken,
+			@RequestBody HeadRequestBody headRequestBody) {
+		return userDetailsService.registerTeacher(authToken, headRequestBody);
+	}
+
 	@GetMapping("/start")
 	public String start() {
 		return "hello world!!";

@@ -29,4 +29,6 @@ public interface IUserDetailsService {
 	public ResponseObject getListOfStudents();
 
 	public ResponseObject getListOfSubjects();
+
+	public ResponseObject registerTeacher(String authToken, HeadRequestBody headRequestBody);
 }

@@ -550,4 +550,70 @@ public class UsersDetailsService implements IUserDetailsService {
 		}
 	}
 
+	@Override
+	public ResponseObject registerTeacher(String authToken, HeadRequestBody headRequestBody) {
+
+		try {
+
+			String authToken2 = authToken.substring(7);
+			String externalId = getUserExternalId(authToken2);
+			if (CommonUtils.isNotNull(externalId)) {
+				if (externalId.equalsIgnoreCase(MessageConstants.UNAUTHORIZED)) {
+					return new ResponseObject(null, null, HttpStatus.UNAUTHORIZED);
+				}
+			}
+			Users user = userDetailsRepository.getUserByExternalId(externalId);
+			if (user == null) {
+				return new ResponseObject(null, ErrorMessages.USER_NOT_REGISTERED, HttpStatus.BAD_REQUEST);
+			} else {
+				if (user.getType().equalsIgnoreCase(RolesEnum.STUDENT.toString())) {
+					return new ResponseObject(null, "You are not authorized to access this resource",
+							HttpStatus.UNAUTHORIZED);
+				}
+			}
+
+			if (CommonUtils.isNull(headRequestBody.getEmail())) {
+				return new ResponseObject(null, ErrorMessages.EMAIL_REQUIRED, HttpStatus.BAD_REQUEST);
+			}
+			if (CommonUtils.isNull(headRequestBody.getPassword())) {
+				return new ResponseObject(null, ErrorMessages.ENTER_PASSWORD, HttpStatus.BAD_REQUEST);
+			}
+			if (CommonUtils.isNull(headRequestBody.getFirstName())) {
+				return new ResponseObject(null, ErrorMessages.FIRST_NAME_REQUIRED, HttpStatus.BAD_REQUEST);
+			}
+			if (CommonUtils.isNull(headRequestBody.getStream())) {
+				return new ResponseObject(null, ErrorMessages.STREAM_REQUIRED, HttpStatus.BAD_REQUEST);
+			}
+
+			List<Users> users = userDetailsRepository.getAllUsers();
+			for (Users allUsers : users) {
+				if (allUsers.getEmail().equalsIgnoreCase(headRequestBody.getEmail())) {
+					return new ResponseObject(null, ErrorMessages.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
+				}
+			}
+
+			Users user2 = new Users(UUID.randomUUID().toString(), headRequestBody.getFirstName(),
+					headRequestBody.getLastName(), headRequestBody.getEmail(),
+					passwordEncoder.encode(headRequestBody.getPassword()), RolesEnum.TEACHER.toString(),
+					Calendar.getInstance(), Calendar.getInstance(), false, headRequestBody.getStream());
+			Users savedUser = userDetailsRepository.saveAndFlush(user2);
+
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(savedUser.getExternalId(), headRequestBody.getPassword()));
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			String jwt = tokenProvider.generateToken(authentication, savedUser);
+
+			return new ResponseObject(
+					new JwtAuthenticationResponse(jwt, "Bearer", savedUser.getEmail(), savedUser.getFirstName(),
+							savedUser.getLastName(), savedUser.getType(), savedUser.getExternalId()),
+					SuccessMessages.ACCOUNT_CREATED_SUCCESS, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseObject(null, e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
 }
