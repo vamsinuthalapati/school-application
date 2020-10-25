@@ -320,6 +320,7 @@ public class DriveService implements IDriveService {
 			LOGGER.info("List size :" + listOfFiles1.size() + " " + listOfFiles2.size() + " " + listOfFiles3.size());
 			return new ResponseObject(listOfFilesList, null, HttpStatus.OK);
 		} catch (Exception e) {
+			LOGGER.info(e.getMessage());
 			return new ResponseObject(null, "Error", HttpStatus.BAD_REQUEST);
 		}
 	}
