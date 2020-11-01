@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag mydockerrepo:$(date +%s)
+      run: docker push vamsi9798/docker9798:first_build
