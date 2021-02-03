@@ -1,5 +1,7 @@
 package com.application.controller;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import com.application.domain.HeadRequestBody;
 import com.application.domain.LoginRequest;
 import com.application.domain.ResponseObject;
 import com.application.domain.UpdatePassword;
+import com.application.service.IReadFileService;
 import com.application.service.IUserDetailsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -30,6 +33,9 @@ public class UserController {
 
 	@Autowired
 	private IUserDetailsService userDetailsService;
+	
+	@Autowired
+	private IReadFileService iReadFileService;
 
 	@PostMapping("/login")
 	public ResponseObject userLogin(@RequestBody LoginRequest loginRequest) {
@@ -87,5 +93,10 @@ public class UserController {
 	@GetMapping("/start")
 	public String start() {
 		return "hello world!!";
+	}
+	
+	@PostMapping("/uploadFileToLocal")
+	public String uploadFile(@RequestParam ("file") MultipartFile file) throws IllegalStateException, IOException {
+		return iReadFileService.uploadFile(file);
 	}
 }
