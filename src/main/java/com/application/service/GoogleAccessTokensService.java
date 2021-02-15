@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,13 +42,10 @@ import com.application.repository.UserDetailsRepository;
 import com.application.utils.CommonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.nimbusds.jwt.SignedJWT;
 
 @Service
 public class GoogleAccessTokensService implements IGoogleAccessTokensService {
-
-	private static Gson gson = new Gson();
 
 	@Value("${Client_ID}")
 	private String clientId;
@@ -230,9 +226,9 @@ public class GoogleAccessTokensService implements IGoogleAccessTokensService {
 				LOGGER.info("responseData::" + responseData);
 				JSONParser parser = new JSONParser();
 				JSONObject obj = (JSONObject) parser.parse(responseData);
-				String accessToken = obj.get("access_token").toString();
+//				String accessToken = obj.get("access_token").toString();
 				String refreshToken = obj.get("refresh_token").toString();
-				String expiryTime = obj.get("expires_in").toString();
+//				String expiryTime = obj.get("expires_in").toString();
 
 				if (accessTokensAccount == null) {
 					UserAccessTokens userAccessTokens = new UserAccessTokens(UUID.randomUUID().toString(), refreshToken,

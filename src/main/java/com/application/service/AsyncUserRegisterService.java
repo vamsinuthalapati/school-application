@@ -5,13 +5,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +20,6 @@ import com.application.domain.Users;
 import com.application.repository.StudentsRepository;
 import com.application.repository.SubjectsRepository;
 import com.application.repository.UserDetailsRepository;
-import com.application.roles.RolesEnum;
-import com.application.security.JwtTokenProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AsyncUserRegisterService {
@@ -41,17 +35,11 @@ public class AsyncUserRegisterService {
 	@Autowired
 	private SubjectsRepository subjectsRepository;
 
-	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
-	private JwtTokenProvider tokenProvider;
 
 	@Autowired
-	public AsyncUserRegisterService(AuthenticationManager authenticationManager, UserDetailsRepository userRepository,
-			PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
-		this.authenticationManager = authenticationManager;
-		this.userDetailsRepository = userRepository;
+	public AsyncUserRegisterService(PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
-		this.tokenProvider = tokenProvider;
 	}
 
 	public static final String PASSWORD = "Test@123";

@@ -46,9 +46,7 @@ import com.application.roles.RolesEnum;
 import com.application.utils.CommonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.nimbusds.jwt.SignedJWT;
 
@@ -56,8 +54,6 @@ import com.nimbusds.jwt.SignedJWT;
 public class DriveService implements IDriveService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DriveService.class);
-
-	private static Gson gson = new Gson();
 
 	@Value("${Client_ID}")
 	private String clientId;
@@ -145,8 +141,8 @@ public class DriveService implements IDriveService {
 				JSONParser parser = new JSONParser();
 				JSONObject obj = (JSONObject) parser.parse(responseData);
 				String accessToken = obj.get("access_token").toString();
-				String refreshToken = obj.get("refresh_token").toString();
-				String expiryTime = obj.get("expires_in").toString();
+//				String refreshToken = obj.get("refresh_token").toString();
+//				String expiryTime = obj.get("expires_in").toString();
 				return accessToken;
 			} else {
 				System.out.println("Error response from access request: " + responseData);
@@ -155,19 +151,15 @@ public class DriveService implements IDriveService {
 
 		} catch (UnsupportedEncodingException e) {
 			LOGGER.info(e.getMessage() + " at " + Calendar.getInstance().getTime());
-			e.printStackTrace();
 			return e.getMessage();
 		} catch (ClientProtocolException e) {
 			LOGGER.info(e.getMessage() + " at " + Calendar.getInstance().getTime());
-			e.printStackTrace();
 			return e.getMessage();
 		} catch (IOException e) {
 			LOGGER.info(e.getMessage() + " at " + Calendar.getInstance().getTime());
-			e.printStackTrace();
 			return e.getMessage();
 		} catch (Exception e) {
 			LOGGER.info(e.getMessage() + " at " + Calendar.getInstance().getTime());
-			e.printStackTrace();
 			return e.getMessage();
 		}
 
@@ -325,6 +317,7 @@ public class DriveService implements IDriveService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ResponseObject shareFileWithPermissions(String accessToken, String fileId, String authToken) {
 
@@ -356,7 +349,7 @@ public class DriveService implements IDriveService {
 			JSONParser parser2 = new JSONParser();
 			JSONObject obj2 = (JSONObject) parser2.parse(fileObject);
 			String mimeType = (String) obj2.get("mimeType");
-			String fileName = (String) obj2.get("name");
+//			String fileName = (String) obj2.get("name");
 			String fileUrl = "";
 			if (mimeType.equalsIgnoreCase(GoogleApiConstants.DOCS)) {
 				fileUrl = "https://docs.google.com/document/d/" + fileId + "/";
@@ -386,8 +379,6 @@ public class DriveService implements IDriveService {
 
 				String responseObject = response.getBody().toString();
 				LOGGER.info("Object :" + responseObject);
-				JSONParser parser = new JSONParser();
-				JSONObject obj = (JSONObject) parser.parse(responseObject);
 			}
 
 			return new ResponseObject("Shared files successfully!", null, HttpStatus.OK);

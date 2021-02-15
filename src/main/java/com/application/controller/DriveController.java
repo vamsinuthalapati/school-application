@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.application.domain.ResponseObject;
 import com.application.service.IDriveService;
 
-import net.minidev.json.parser.ParseException;
-
 @RestController
 @RequestMapping("/api/v1/drive")
 public class DriveController {

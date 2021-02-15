@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.application.domain.ResponseObject;
 
-import net.minidev.json.parser.ParseException;
-
 @Service
 public interface IDriveService {
 
