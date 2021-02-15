@@ -1,0 +1,8 @@
+ssh-keygen
+name the ssh key file
+add the ssh_key from .pub file in github account
+=======================================================
+
+connecting to Github using ssh
+eval `ssh-agent`
+ssh-add ~/.ssh/(ssh_key_fileName)
